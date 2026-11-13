@@ -2,17 +2,34 @@
 <html>
 <head>
     <title>Főoldal</title>
+    <link rel="stylesheet" href="static/css/main.css"/>
 </head>
 <body>
-    <h2>Főoldal</h2>
-    
-    <img id="img-uploaded">
-    <form>
-        <input id="form-upload-img" type="file" accept="image/*">
-    </form>
-    
-    <div>
-        <script type="text/javascript" src="static/js/main.js"></script>
+    <div id="container">
+        <p id="response-txt"></p>
+        
+        <section id="main">
+            <div class="row centered">
+                <div class="upload-field">
+                    <form>
+                        <input id="img-input-1" type="file" accept="image/*">
+                    </form>
+                    <div class="image-box">
+                        <img id="img-1">
+                    </div>
+                </div>
+                <div class="upload-field">
+                    <form>
+                        <input id="img-input-2" type="file" accept="image/*">
+                    </form>
+                    <div class="image-box">
+                        <img id="img-2">
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
+    
+    <script type="text/javascript" src="static/js/main.js"></script>
 </body>
 </html>

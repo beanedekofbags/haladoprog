@@ -1,0 +1,67 @@
+:root {
+    --bg-color-main: white;
+}
+
+body {
+    background-color: var(--bg-color-main);
+    margin: 20px;
+}
+
+#main {
+    margin: auto;
+    width: 60%;
+}
+
+.row {
+    display: flex;
+    box-sizing: border-box;
+    align-items: stretch;
+}
+    .row > * {
+        box-sizing: border-box;
+    }
+    .row.centered {
+        justify-content: center;
+    }
+    .row.even {
+        justify-content: space-evenly;
+    }
+
+.upload-field {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    margin: 10px;
+    
+    flex-wrap: wrap;
+}
+    .upload-field * {
+        min-width: 0;
+        max-width: 400px;
+        overflow-wrap: break-word; /* Breaks long words onto the next line */
+        word-break: break-word;
+    }
+    
+.image-box {
+    background-color: rgb(225, 225, 231);
+    
+    border: none;
+    border-radius: 10px;
+    
+    width: 400px;
+    height: 400px;
+    
+    align-content: center;
+    
+    margin: 10px;
+    padding: 6px;
+}
+    .image-box>img {
+        border: inherit;
+        border-radius: inherit;
+        object-fit:contain;
+    }
+    
+.inactive {
+    display:none;
+}

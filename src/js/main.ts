@@ -1,16 +1,30 @@
-window.onload = function(ev: Event) {
+function get(id: string): HTMLElement | null {
+    return document.getElementById(id);
+}
+
+window.onload = function() {
     
-    let form_img_upload = document.getElementById('form-upload-img')! as HTMLInputElement;
-    let img_uploaded = document.getElementById('img-uploaded')! as HTMLImageElement;
+    let imginput_1 = get('img-input-1') as HTMLInputElement;
+    let img_1 = get('img-1') as HTMLImageElement;
+        img_1.classList.add('inactive')
     
-    console.log("HEEEELP")
+    let imginput_2 = get('img-input-2') as HTMLInputElement;
+    let img_2 = get('img-2') as HTMLImageElement;
+        img_2.classList.add('inactive')
     
-    form_img_upload.onchange = function(ev: Event) {
-        let files = form_img_upload.files
-        console.log(files)
+    const display_image = function(input: HTMLInputElement, img: HTMLImageElement) {
+        let files = input.files
         if (files !== null) {
             let url = window.URL.createObjectURL(files[0]!)
-            img_uploaded.src = url
+            
+            img.classList.remove('inactive')
+            img.src = url
+        }
+        else {
+            img.classList.add('inactive')
         }
     }
+    
+    imginput_1.onchange = () => display_image(imginput_1, img_1)
+    imginput_2.onchange = () => display_image(imginput_2, img_2)
 }
