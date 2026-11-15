@@ -6,27 +6,30 @@
 </head>
 <body>
     <div id="container">
-        <p id="response-txt"></p>
         
         <section id="main">
-            <div class="row centered">
-                <div class="upload-field">
-                    <form>
-                        <input id="img-input-1" type="file" accept="image/*">
-                    </form>
-                    <div class="image-box">
-                        <img id="img-1">
+            <form id="img-form">
+                <div class="row centered">
+                    <div class="upload-field">
+                        <input id="img-input-1" name="img-input-1" type="file" accept="image/png,image/jpeg,image/webp">
+                        <div class="image-box">
+                            <img id="img-1">
+                        </div>
+                    </div>
+                    <div class="upload-field">
+                        <input id="img-input-2" name="img-input-2" type="file" accept="image/png,image/jpeg,image/webp">
+                        <div class="image-box">
+                            <img id="img-2">
+                        </div>
                     </div>
                 </div>
-                <div class="upload-field">
-                    <form>
-                        <input id="img-input-2" type="file" accept="image/*">
-                    </form>
-                    <div class="image-box">
-                        <img id="img-2">
-                    </div>
+                <div class="row centered">
+                    <p id="response-txt"></p>
                 </div>
-            </div>
+                <div class="row centered">
+                    <input type="submit" id="submit-imgs" value="Beküldés">
+                </div>
+            </form>
         </section>
     </div>
     

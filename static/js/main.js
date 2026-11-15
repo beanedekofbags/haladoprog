@@ -3,6 +3,8 @@ function get(id) {
     return document.getElementById(id);
 }
 window.onload = function () {
+    let response_txt = get('response-txt');
+    let imgform = get('img-form');
     let imginput_1 = get('img-input-1');
     let img_1 = get('img-1');
     img_1.classList.add('inactive');
@@ -22,4 +24,23 @@ window.onload = function () {
     };
     imginput_1.onchange = () => display_image(imginput_1, img_1);
     imginput_2.onchange = () => display_image(imginput_2, img_2);
+    imgform.onsubmit = (ev) => {
+        ev.preventDefault();
+        let data = new FormData(imgform);
+        console.log(data);
+        fetch('/api/test', {
+            "method": "POST",
+            "body": data
+        })
+            .then(res => {
+            if (res.ok)
+                return res.json();
+            return {
+                "error": "An unexpected error has occurred!"
+            };
+        })
+            .then(json => {
+            response_txt.textContent = json.message ?? json.error;
+        });
+    };
 };
