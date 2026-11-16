@@ -8,8 +8,13 @@ class ImageSelector {
     imgFront;
     imgBack;
     container;
-    constructor(id) {
+    message;
+    constructor(id, text) {
         let htmlId = `img-input-${id}`;
+        let message = document.createElement('p');
+        message.textContent = text;
+        message.classList.add('overlay-text');
+        this.message = message;
         let input = document.createElement('input');
         input.id = htmlId;
         input.name = htmlId;
@@ -30,6 +35,7 @@ class ImageSelector {
         let label = document.createElement('label');
         label.htmlFor = htmlId;
         label.classList.add('img-container');
+        label.appendChild(this.message);
         label.appendChild(this.imgFront);
         label.appendChild(blurParent);
         let container = document.createElement('div');
@@ -47,6 +53,7 @@ class ImageSelector {
         this.imgFront.src = src;
         this.imgBack.src = src;
         let toggle = (src == '');
+        this.message.classList.toggle('inactive', !toggle);
         this.imgFront.classList.toggle('inactive', toggle);
         this.imgBack.parentElement.classList.toggle('inactive', toggle);
     }
@@ -64,8 +71,8 @@ window.onload = function () {
     let img_2 = get('img-2') as HTMLImageElement;
         img_2.classList.add('inactive')
     */
-    let img1 = new ImageSelector(1).create(imgmain);
-    let img2 = new ImageSelector(2).create(imgmain);
+    let img1 = new ImageSelector(1, 'Minta kép kiválasztása...').create(imgmain);
+    let img2 = new ImageSelector(2, 'Elemzendő kép kiválasztása...').create(imgmain);
     const display_image = function (selector) {
         let files = selector.input.files;
         let src = files != null ? window.URL.createObjectURL(files[0]) : null;

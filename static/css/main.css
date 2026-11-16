@@ -1,5 +1,6 @@
 :root {
     --bg-color-main: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -65,6 +66,14 @@ body {
         
         cursor: pointer;
     }
+        .upload-field .img-container>.overlay-text {
+            position:absolute;
+            align-self: center;
+            z-index: 3;
+            opacity: 0.6;
+            font-weight: 400;
+        }
+    
         .upload-field .img-container img {
             position:absolute;
             
