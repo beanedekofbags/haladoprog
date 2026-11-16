@@ -35,33 +35,72 @@ body {
     
     flex-wrap: wrap;
 }
-    .upload-field * {
+    .upload-field p {
         min-width: 0;
         max-width: 400px;
         overflow-wrap: break-word; /* Breaks long words onto the next line */
         word-break: break-word;
     }
-    
-.image-box {
-    background-color: rgb(225, 225, 231);
-    
-    border: none;
-    border-radius: 10px;
-    
-    width: 400px;
-    height: 400px;
-    
-    align-content: center;
-    
-    margin: 10px;
-    padding: 6px;
-}
-    .image-box>img {
-        border: inherit;
-        border-radius: inherit;
-        object-fit:contain;
+    .upload-field>input[type="file"] {
+        display: none;
     }
-    
+    .upload-field .img-container {
+        display: flex;
+        position: relative;
+        overflow: hidden;
+        
+        background-color: rgb(225, 225, 231);
+        
+        border: none;
+        border-radius: 10px;
+        
+        width: 400px;
+        height: 400px;
+        
+        align-content: center;
+        justify-content: center;
+        
+        margin: 10px;
+        padding: 6px;
+        
+        cursor: pointer;
+    }
+        .upload-field .img-container img {
+            position:absolute;
+            
+            border: inherit;
+            border-radius: inherit;
+            align-self: center;
+            
+            object-fit:contain;
+            object-position: center;
+            z-index: 2;
+        }
+        
+        .upload-field .img-container>.img-front {
+            box-shadow: 10px 10px 10px rgba(0,0,0,0.3);
+            max-width: 400px;
+            max-height: 400px;
+        }
+        
+        .upload-field .img-container>.img-back {
+            position: absolute;
+            overflow: hidden;
+            margin: -20px;
+            width: 150%;
+            height: 150%;
+            z-index: 1;
+        }
+        .upload-field .img-container>.img-back>img {
+            filter: blur(8px) brightness(75%);
+            opacity: 0.85;
+            object-fit: cover;
+            width: inherit;
+            height: inherit;
+        }
+
 .inactive {
     display:none;
+    object-fit: fill;
+    object-position: center;
 }
