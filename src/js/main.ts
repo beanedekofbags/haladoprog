@@ -4,6 +4,8 @@ function get(id: string): HTMLElement | null {
 
 class ImageSelector {
     
+    private static maxOffset = 4;
+    private static offsetThreshold = 400;
     private static accepted = 'image/png,image/jpeg,image/webp'
     
     public input: HTMLInputElement;
@@ -13,7 +15,8 @@ class ImageSelector {
     private message: HTMLParagraphElement;
     
     public constructor(id: Number, text: string) {
-        let htmlId = `img-input-${id}`
+        const htmlInputId = `img-input-${id}`
+        const htmlImgId = `img-${id}`
         
         let message = document.createElement('p');
             message.textContent = text;
@@ -21,14 +24,14 @@ class ImageSelector {
         this.message = message;
         
         let input = document.createElement('input');
-            input.id = htmlId;
-            input.name = htmlId;
+            input.id = htmlInputId;
+            input.name = htmlInputId;
             input.type = "file";
             input.accept = ImageSelector.accepted;
         this.input = input;
         
         let imgFront = document.createElement('img');
-            imgFront.id = `img-${id}`
+            imgFront.id = htmlImgId;
             imgFront.classList.add('img-front');
             imgFront.classList.add('inactive');
         this.imgFront = imgFront;
@@ -42,7 +45,7 @@ class ImageSelector {
             blurParent.appendChild(this.imgBack);
         
         let label = document.createElement('label');
-            label.htmlFor = htmlId;
+            label.htmlFor = htmlInputId;
             label.classList.add('img-container');
             label.appendChild(this.message);
             label.appendChild(this.imgFront);
@@ -71,6 +74,21 @@ class ImageSelector {
         this.imgBack.parentElement!.classList.toggle('inactive', toggle);
     }
     
+    public moveWithCursor(ev: MouseEvent) {
+        if (this.imgBack !== undefined) {
+            console.log("mouse moved!!!!");
+            const rect = this.imgBack.getBoundingClientRect();
+            
+            const x = ev.screenX; const y = ev.screenY;
+            const centerX = rect.x; const centerY = rect.y;
+            
+            let offsetX = (x - centerX) / ImageSelector.offsetThreshold * ImageSelector.maxOffset;
+            let offsetY = (y - centerY) / ImageSelector.offsetThreshold * ImageSelector.maxOffset;
+            
+            this.imgBack.style.translate = `${offsetX}px ${offsetY}px`
+        }
+    }
+    
 }
 
 window.onload = function() {
@@ -92,6 +110,11 @@ window.onload = function() {
    
     let img1 = new ImageSelector(1, 'Minta kép kiválasztása...').create(imgmain);
     let img2 = new ImageSelector(2, 'Elemzendő kép kiválasztása...').create(imgmain);
+    
+    window.onmousemove = function(ev: MouseEvent) {
+        img1.moveWithCursor(ev);
+        img2.moveWithCursor(ev);
+    }
     
     const display_image = function(selector: ImageSelector) {
         let files = selector.input.files
