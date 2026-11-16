@@ -8,57 +8,165 @@ class ImageSelector {
     static accepted = 'image/png,image/jpeg,image/webp';
     input;
     imgFront;
+    imgFront2;
     imgBack;
     container;
     message;
+    arrowLeft;
+    arrowRight;
+    urls = [];
+    page = 0;
     constructor(id, text) {
         const htmlInputId = `img-input-${id}`;
         const htmlImgId = `img-${id}`;
         let message = document.createElement('p');
-        message.textContent = text;
-        message.classList.add('overlay-text');
-        this.message = message;
+        {
+            message.textContent = text;
+            message.classList.add('overlay-text');
+            this.message = message;
+        }
         let input = document.createElement('input');
-        input.id = htmlInputId;
-        input.name = htmlInputId;
-        input.type = "file";
-        input.accept = ImageSelector.accepted;
-        this.input = input;
+        {
+            input.id = htmlInputId;
+            input.name = htmlInputId;
+            input.type = "file";
+            input.accept = ImageSelector.accepted;
+            input.multiple = true;
+            this.input = input;
+            this.input.onchange = () => this.initUrls();
+        }
         let imgFront = document.createElement('img');
-        imgFront.id = htmlImgId;
-        imgFront.classList.add('img-front');
-        imgFront.classList.add('inactive');
-        this.imgFront = imgFront;
+        {
+            imgFront.id = htmlImgId;
+            imgFront.classList.add('img-front');
+            imgFront.classList.add('inactive');
+            imgFront.style.zIndex = '4';
+            this.imgFront = imgFront;
+        }
+        let imgFront2 = imgFront.cloneNode();
+        {
+            imgFront2.style.zIndex = '3';
+            this.imgFront2 = imgFront2;
+        }
         let imgBack = document.createElement('img');
-        this.imgBack = imgBack;
+        {
+            this.imgBack = imgBack;
+        }
         let blurParent = document.createElement('div');
-        blurParent.classList.add('img-back');
-        blurParent.classList.add('inactive');
-        blurParent.appendChild(this.imgBack);
+        {
+            blurParent.classList.add('img-back');
+            blurParent.classList.add('inactive');
+            blurParent.style.zIndex = '1';
+            blurParent.appendChild(this.imgBack);
+        }
         let label = document.createElement('label');
-        label.htmlFor = htmlInputId;
-        label.classList.add('img-container');
-        label.appendChild(this.message);
-        label.appendChild(this.imgFront);
-        label.appendChild(blurParent);
+        {
+            label.htmlFor = htmlInputId;
+            label.classList.add('img-container');
+            label.appendChild(this.message);
+            label.appendChild(this.imgFront);
+            label.appendChild(this.imgFront2);
+            label.appendChild(blurParent);
+        }
+        let arrowLeft = document.createElement('button');
+        {
+            arrowLeft.type = 'button';
+            arrowLeft.classList.add('arrow');
+            this.arrowLeft = arrowLeft;
+            this.arrowLeft.onclick = () => this.flipImg(-1);
+        }
+        let arrowRight = document.createElement('button');
+        {
+            arrowRight.type = 'button';
+            arrowRight.classList.add('arrow');
+            this.arrowRight = arrowRight;
+            this.arrowRight.onclick = () => this.flipImg(1);
+        }
         let container = document.createElement('div');
-        container.classList.add('upload-field');
-        container.appendChild(label);
-        container.appendChild(this.input);
-        this.container = container;
+        {
+            container.classList.add('upload-field');
+            container.appendChild(arrowLeft);
+            container.appendChild(label);
+            container.appendChild(arrowRight);
+            container.appendChild(this.input);
+            this.container = container;
+        }
+        this.updateArrows();
+    }
+    initUrls() {
+        const files = this.input.files;
+        this.urls = [];
+        if (files?.length) {
+            for (let i = 0; i < files.length; i++) {
+                let url = window.URL.createObjectURL(files.item(i));
+                this.urls.push(url);
+            }
+        }
+        this.page = 0;
+        this.updateImg();
+        this.updateArrows();
+    }
+    updateArrows() {
+        let max = this.urls?.length ?? 1;
+        this.arrowLeft.classList.toggle('enabled', this.page > 0);
+        this.arrowRight.classList.toggle('enabled', this.page < max - 1);
+    }
+    updateImg(flip = 0) {
+        let url = this.urls[this.page];
+        let prevUrl = this.urls[this.page - flip];
+        let toggle = (url === undefined);
+        this.message.classList.toggle('inactive', !toggle);
+        this.imgFront.classList.toggle('inactive', toggle);
+        this.imgFront2.classList.toggle('inactive', toggle);
+        this.imgBack.parentElement.classList.toggle('inactive', toggle);
+        if (!toggle) {
+            this.imgBack.src = url ?? '';
+            if (flip !== 0) {
+                const flipDuration = 500;
+                const move = this.container.getBoundingClientRect().width;
+                this.imgFront.src = prevUrl ?? '';
+                this.imgFront2.src = url ?? '';
+                this.imgFront.getAnimations()[0]?.cancel();
+                this.imgFront2.getAnimations()[0]?.cancel();
+                this.imgFront2.classList.toggle('inactive', false);
+                let anim1 = this.imgFront2.animate([
+                    { transform: `translateX(${flip > 0 ? move : -move}px)`, offset: 0 },
+                    { transform: `translateX(0%)`, offset: 1.0 }
+                ], {
+                    duration: flipDuration,
+                    easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                });
+                anim1.onfinish = () => {
+                    this.imgFront.src = url ?? '';
+                };
+                let anim2 = this.imgFront.animate([
+                    { transform: `translateX(0%)`, offset: 0 },
+                    { transform: `translateX(${flip == 1 ? -move : move}px)`, offset: 1.0 }
+                ], {
+                    duration: flipDuration,
+                    easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                });
+                anim2.onfinish = () => {
+                    this.imgFront2.classList.toggle('inactive', true);
+                };
+            }
+            else {
+                this.imgFront.src = this.imgBack.src = url ?? '';
+            }
+        }
     }
     create(parent) {
         parent.appendChild(this.container);
         return this;
     }
-    setImg(src) {
-        src = src ?? '';
-        this.imgFront.src = src;
-        this.imgBack.src = src;
-        let toggle = (src == '');
-        this.message.classList.toggle('inactive', !toggle);
-        this.imgFront.classList.toggle('inactive', toggle);
-        this.imgBack.parentElement.classList.toggle('inactive', toggle);
+    flipImg(offset) {
+        let max = this.urls?.length ?? 1;
+        let newpage = this.page + offset;
+        if (newpage >= 0 && newpage <= max - 1) {
+            this.page = newpage;
+            this.updateImg(offset);
+            this.updateArrows();
+        }
     }
     moveWithCursor(ev) {
         if (this.imgBack !== undefined) {
@@ -87,19 +195,12 @@ window.onload = function () {
     let img_2 = get('img-2') as HTMLImageElement;
         img_2.classList.add('inactive')
     */
-    let img1 = new ImageSelector(1, 'Minta kép kiválasztása...').create(imgmain);
-    let img2 = new ImageSelector(2, 'Elemzendő kép kiválasztása...').create(imgmain);
+    let img1 = new ImageSelector(1, 'Referenciakép(ek) kiválasztása...').create(imgmain);
+    let img2 = new ImageSelector(2, 'Elemzendő kép(ek) kiválasztása...').create(imgmain);
     window.onmousemove = function (ev) {
         img1.moveWithCursor(ev);
         img2.moveWithCursor(ev);
     };
-    const display_image = function (selector) {
-        let files = selector.input.files;
-        let src = files != null ? window.URL.createObjectURL(files[0]) : null;
-        selector.setImg(src);
-    };
-    img1.input.onchange = () => display_image(img1);
-    img2.input.onchange = () => display_image(img2);
     imgform.onsubmit = (ev) => {
         ev.preventDefault();
         let data = new FormData(imgform);
