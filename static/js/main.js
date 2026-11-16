@@ -16,6 +16,8 @@ class ImageSelector {
     arrowRight;
     urls = [];
     page = 0;
+    anim1;
+    anim2;
     constructor(id, text) {
         const htmlInputId = `img-input-${id}`;
         const htmlImgId = `img-${id}`;
@@ -126,27 +128,27 @@ class ImageSelector {
                 const move = this.container.getBoundingClientRect().width;
                 this.imgFront.src = prevUrl ?? '';
                 this.imgFront2.src = url ?? '';
-                this.imgFront.getAnimations()[0]?.cancel();
-                this.imgFront2.getAnimations()[0]?.cancel();
+                this.anim1?.cancel();
+                this.anim2?.cancel();
                 this.imgFront2.classList.toggle('inactive', false);
-                let anim1 = this.imgFront2.animate([
+                this.anim1 = this.imgFront2.animate([
                     { transform: `translateX(${flip > 0 ? move : -move}px)`, offset: 0 },
                     { transform: `translateX(0%)`, offset: 1.0 }
                 ], {
                     duration: flipDuration,
                     easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
                 });
-                anim1.onfinish = () => {
+                this.anim1.onfinish = () => {
                     this.imgFront.src = url ?? '';
                 };
-                let anim2 = this.imgFront.animate([
+                this.anim2 = this.imgFront.animate([
                     { transform: `translateX(0%)`, offset: 0 },
                     { transform: `translateX(${flip == 1 ? -move : move}px)`, offset: 1.0 }
                 ], {
                     duration: flipDuration,
                     easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
                 });
-                anim2.onfinish = () => {
+                this.anim2.onfinish = () => {
                     this.imgFront2.classList.toggle('inactive', true);
                 };
             }

@@ -20,6 +20,9 @@ class ImageSelector {
     private urls: Array<string> = [];
     private page: number = 0;
     
+    private anim1: Animation | undefined;
+    private anim2: Animation | undefined;
+    
     public constructor(id: Number, text: string) {
         const htmlInputId = `img-input-${id}`
         const htmlImgId = `img-${id}`
@@ -140,29 +143,29 @@ class ImageSelector {
                 this.imgFront.src = prevUrl ?? '';
                 this.imgFront2.src = url ?? '';
                 
-                this.imgFront.getAnimations()[0]?.cancel();
-                this.imgFront2.getAnimations()[0]?.cancel();
+                this.anim1?.cancel();
+                this.anim2?.cancel();
                 
                 this.imgFront2.classList.toggle('inactive', false);
-                let anim1 = this.imgFront2.animate([
+                this.anim1 = this.imgFront2.animate([
                     { transform: `translateX(${flip > 0 ? move : -move}px)`, offset: 0 },
                     { transform: `translateX(0%)`, offset: 1.0 }
                 ], {
                     duration: flipDuration,
                     easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
                 })
-                anim1.onfinish = () => {
+                this.anim1.onfinish = () => {
                     this.imgFront.src = url ?? '';
                 }
                 
-                let anim2 = this.imgFront.animate([
+                this.anim2 = this.imgFront.animate([
                     { transform: `translateX(0%)`, offset: 0 },
                     { transform: `translateX(${flip == 1 ? -move : move}px)`, offset: 1.0 }
                 ], {
                     duration: flipDuration,
                     easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
                 })
-                anim2.onfinish = () => {
+                this.anim2.onfinish = () => {
                     this.imgFront2.classList.toggle('inactive', true);
                 }
             }
@@ -210,16 +213,6 @@ window.onload = function() {
     
     let imgform = get('img-form') as HTMLFormElement;
     let imgmain = get('img-main')!;
-    
-    /*
-    let imginput_1 = get('img-input-1') as HTMLInputElement;
-    let img_1 = get('img-1') as HTMLImageElement;
-        img_1.classList.add('inactive')
-    
-    let imginput_2 = get('img-input-2') as HTMLInputElement;
-    let img_2 = get('img-2') as HTMLImageElement;
-        img_2.classList.add('inactive')
-    */
    
     let img1 = new ImageSelector(1, 'Referenciakép(ek) kiválasztása...').create(imgmain);
     let img2 = new ImageSelector(2, 'Elemzendő kép(ek) kiválasztása...').create(imgmain);

@@ -20,22 +20,24 @@ async def vision():
     print(files)
     if ('img-input-1' not in files) or ('img-input-2' not in files):
         return {
-            "error": "Incorrect form model"
+            "error": "Incorrect form model!"
         }
     
     img1 = request.files.getlist('img-input-1')
     img2 = request.files.getlist('img-input-2')
 
-    if not img1 or not img2:
+    print(img1)
+
+    if not img1[0].filename or not img2[0].filename:
         return {
-            "error": "Not enough images provided"
+            "error": "Not enough images provided!"
         }
 
     filetype_img1 = any(i.content_type not in allowed_types for i in img1)
     filetype_img2 = any(i.content_type not in allowed_types for i in img2)
     if filetype_img1 or filetype_img2:
         return {
-            "error": "Incorrect file type(s)"
+            "error": "Incorrect file type(s)!"
         }
     
     return await processImages(img1, img2)
