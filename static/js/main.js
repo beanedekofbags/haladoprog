@@ -119,7 +119,6 @@ class ImageSelector {
         let toggle = (url === undefined);
         this.message.classList.toggle('inactive', !toggle);
         this.imgFront.classList.toggle('inactive', toggle);
-        this.imgFront2.classList.toggle('inactive', toggle);
         this.imgBack.parentElement.classList.toggle('inactive', toggle);
         if (!toggle) {
             this.imgBack.src = url ?? '';
@@ -190,6 +189,7 @@ let errorAnim = {
 };
 window.onload = function () {
     let response_txt = get('response-txt');
+    response_txt.classList.add('invisible');
     let imgform = get('img-form');
     let imgsubmit = get('submit-imgs');
     let imgmain = get('img-main');
@@ -237,6 +237,7 @@ window.onload = function () {
                 });
             }
             response_txt.textContent = json.message ?? json.error;
+            response_txt.classList.toggle('invisible', false);
             loading.classList.toggle('invisible', true);
         });
     };

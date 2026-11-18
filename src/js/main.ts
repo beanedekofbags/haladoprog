@@ -133,7 +133,6 @@ class ImageSelector {
         this.message.classList.toggle('inactive', !toggle);
         
         this.imgFront.classList.toggle('inactive', toggle);
-        this.imgFront2.classList.toggle('inactive', toggle);
         this.imgBack.parentElement!.classList.toggle('inactive', toggle);
         
         if (!toggle) {
@@ -217,13 +216,14 @@ let errorAnim: { rotate: Animation | undefined, color: Animation | undefined } =
 window.onload = function() {
     
     let response_txt = get('response-txt') as HTMLParagraphElement;
+    response_txt.classList.add('invisible');
     
     let imgform = get('img-form') as HTMLFormElement;
     let imgsubmit = get('submit-imgs') as HTMLInputElement;
     let imgmain = get('img-main')!;
    
     let loading = get('loading')!;
-    loading.classList.add('invisible')
+    loading.classList.add('invisible');
     
     let img1 = new ImageSelector(1, 'Referenciakép(ek) kiválasztása...').create(imgmain);
     let img2 = new ImageSelector(2, 'Elemzendő kép(ek) kiválasztása...').create(imgmain);
@@ -274,6 +274,7 @@ window.onload = function() {
                     });
                 }
                 response_txt.textContent = json.message ?? json.error;
+                response_txt.classList.toggle('invisible', false);
                 loading.classList.toggle('invisible', true);
             })
     }

@@ -15,7 +15,7 @@ def index():
     return template("index.html")
 
 @app.post('/api/vision')
-async def vision():
+def vision():
     files = request.files
     print(files)
     if ('img-input-1' not in files) or ('img-input-2' not in files):
@@ -40,4 +40,7 @@ async def vision():
             "error": "Incorrect file type(s)!"
         }
     
-    return await processImages(img1, img2)
+    return processImages(
+        [img.stream.read() for img in img1],
+        [img.stream.read() for img in img2]
+    )
