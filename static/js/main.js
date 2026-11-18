@@ -1,4 +1,4 @@
-"use strict";
+import { easings } from "./easing.js";
 function get(id) {
     return document.getElementById(id);
 }
@@ -136,7 +136,7 @@ class ImageSelector {
                     { transform: `translateX(0%)`, offset: 1.0 }
                 ], {
                     duration: flipDuration,
-                    easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                    easing: easings.exponential.out
                 });
                 this.anim1.onfinish = () => {
                     this.imgFront.src = url ?? '';
@@ -146,7 +146,7 @@ class ImageSelector {
                     { transform: `translateX(${flip == 1 ? -move : move}px)`, offset: 1.0 }
                 ], {
                     duration: flipDuration,
-                    easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                    easing: easings.exponential.out
                 });
                 this.anim2.onfinish = () => {
                     this.imgFront2.classList.toggle('inactive', true);
@@ -184,19 +184,17 @@ class ImageSelector {
         }
     }
 }
+let errorAnim = {
+    rotate: undefined,
+    color: undefined
+};
 window.onload = function () {
     let response_txt = get('response-txt');
     let imgform = get('img-form');
+    let imgsubmit = get('submit-imgs');
     let imgmain = get('img-main');
-    /*
-    let imginput_1 = get('img-input-1') as HTMLInputElement;
-    let img_1 = get('img-1') as HTMLImageElement;
-        img_1.classList.add('inactive')
-    
-    let imginput_2 = get('img-input-2') as HTMLInputElement;
-    let img_2 = get('img-2') as HTMLImageElement;
-        img_2.classList.add('inactive')
-    */
+    let loading = get('loading');
+    loading.classList.add('invisible');
     let img1 = new ImageSelector(1, 'Referenciakép(ek) kiválasztása...').create(imgmain);
     let img2 = new ImageSelector(2, 'Elemzendő kép(ek) kiválasztása...').create(imgmain);
     window.onmousemove = function (ev) {
@@ -206,8 +204,8 @@ window.onload = function () {
     imgform.onsubmit = (ev) => {
         ev.preventDefault();
         let data = new FormData(imgform);
-        console.log(data);
-        fetch('/api/test', {
+        loading.classList.toggle('invisible', false);
+        fetch('/api/vision', {
             "method": "POST",
             "body": data
         })
@@ -219,7 +217,27 @@ window.onload = function () {
             };
         })
             .then(json => {
+            if (json.error) {
+                errorAnim.rotate?.cancel();
+                errorAnim.color?.cancel();
+                errorAnim.rotate = imgsubmit.animate([
+                    { rotate: '4deg', backgroundColor: '', offset: 0.0 },
+                    { rotate: '0deg', offset: 1.0 }
+                ], {
+                    duration: 600,
+                    easing: easings.bounce.out
+                });
+                const oBackgroundColor = imgsubmit.style.backgroundColor;
+                errorAnim.rotate = imgsubmit.animate([
+                    { backgroundColor: 'rgb(219, 127, 155)', offset: 0.0 },
+                    { backgroundColor: oBackgroundColor, offset: 1.0 }
+                ], {
+                    duration: 600,
+                    easing: easings.exponential.out
+                });
+            }
             response_txt.textContent = json.message ?? json.error;
+            loading.classList.toggle('invisible', true);
         });
     };
 };

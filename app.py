@@ -14,7 +14,7 @@ allowed_types = [
 def index():
     return template("index.html")
 
-@app.post('/api/test')
+@app.post('/api/vision')
 async def vision():
     files = request.files
     print(files)
