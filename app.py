@@ -1,6 +1,7 @@
 from flask import Flask, request, abort
 from flask import render_template as template
-from vision import processImages
+from src.py.vision import processImages
+from src.py.classes.image import ImageInput
 
 app = Flask(__name__)
 
@@ -41,6 +42,6 @@ def vision():
         }
     
     return processImages(
-        [img.stream.read() for img in img1],
-        [img.stream.read() for img in img2]
+        [ImageInput(img.stream.read(), img.filename) for img in img1],
+        [ImageInput(img.stream.read(), img.filename) for img in img2]
     )
