@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
 class ImageSearchResult(BaseModel):
-    name: str
     confidence: int
 
 class ImageInput:

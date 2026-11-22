@@ -1,8 +1,9 @@
 import easings from "../util/easings.js";
 export class ImageSelectorElement {
     static accepted = 'image/png,image/jpeg,image/webp';
-    parallaxScale = 4;
+    parallaxScale = 3;
     parallaxDistance = 400;
+    parallaxEaseAmount = 250;
     flipDuration = 500;
     input;
     imgFront;
@@ -186,7 +187,7 @@ export class ImageSelectorElement {
             this.imgBack.animate([
                 { translate: `${offsetX}px ${offsetY}px` }
             ], {
-                duration: 400,
+                duration: this.parallaxEaseAmount,
                 fill: "forwards"
             });
         }

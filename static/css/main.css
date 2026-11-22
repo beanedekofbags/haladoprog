@@ -1,6 +1,6 @@
 :root {
     --bg-color-main: white;
-    --image-size: 600px;
+    --image-size: 500px;
 }
 
 body * {
@@ -151,6 +151,29 @@ body {
     scale: 1.0 0.95;
 }
 
+input[type="text"] {
+    font-size: large;
+    text-align: center;
+    
+    border: 1px solid rgba(0,0,0,0.5);
+    border-radius: 6px;
+    
+    padding: 8px;
+    
+    background-image: url("../img/grid.png");
+    background-color: rgba(0,0,0,0.05);
+    background-size: 2px;
+    image-rendering: pixelated;
+}
+input[type="text"]:focus {
+    outline: none;
+    background-color: rgba(0,0,0,0.2);
+}
+#img-desc {
+    width: 70%;
+    height: 40px;
+}
+
 hr {
     width: 80%;
     border: none;
@@ -159,23 +182,35 @@ hr {
     margin-bottom: 16px;
 }
 
+.submit-container {
+    position: relative;
+}
+
 form input[type="submit"] {
+    position: absolute;
     width: 40%;
     height: 80px;
     border: none;
     border-radius: 8px;
     font-size: large;
     margin-top: 16px;
+    z-index: 1;
 }
 
 /*forrás: https://codepen.io/r34h87fh/pen/JjQbjK*/
+
+#loading {
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+}
+
 .throbber-container {
-    position: relative;
     display: inline-block;
     box-sizing: border-box;
     padding: 30px;
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
 }
 
 .throbber-container>.circle {
@@ -183,7 +218,7 @@ form input[type="submit"] {
     width: 100%;
     height: 100%;
     border-radius: 100%;
-    border: 10px solid rgba(61, 68, 77, 0.2);
+    border: 7px solid rgba(61, 68, 77, 0.2);
     border-top-color: #2b2c30;
     animation: spin 1s infinite linear;
 }

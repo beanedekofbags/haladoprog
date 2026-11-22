@@ -4,8 +4,9 @@ export class ImageSelectorElement {
     
     private static accepted = 'image/png,image/jpeg,image/webp'
     
-    public parallaxScale = 4;
+    public parallaxScale = 3;
     public parallaxDistance = 400;
+    public parallaxEaseAmount = 250;
     public flipDuration = 500;
     
     public input: HTMLInputElement;
@@ -216,7 +217,7 @@ export class ImageSelectorElement {
             this.imgBack.animate([
                 { translate: `${offsetX}px ${offsetY}px` }
             ], {
-                duration: 400,
+                duration: this.parallaxEaseAmount,
                 fill: "forwards"
             })
         }

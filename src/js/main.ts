@@ -2,8 +2,11 @@ import { get } from "./util/html.js";
 import { ImageSelectorElement } from "./classes/ImageSelectorElement.js";
 import easings from "./util/easings.js";
 
-const errorAnim: { [id: string]: Animation } = {}
+let errorAnim: { [id: string]: Animation } = {}
+let throbberAnim: Animation | undefined;
+
 const errorAnimDuration = 600;
+const throbberPopDuration = 300;
 
 window.onload = function() {
     
@@ -13,6 +16,8 @@ window.onload = function() {
     let imgform = get('img-form') as HTMLFormElement;
     let imgsubmit = get('submit-imgs') as HTMLInputElement;
     let imgmain = get('img-main')!;
+    
+    const submitText = imgsubmit.value;
    
     let loading = get('loading')!;
     loading.classList.add('invisible');
@@ -29,7 +34,18 @@ window.onload = function() {
         ev.preventDefault();
         
         let data = new FormData(imgform)
+        imgsubmit.value = ''
+        imgsubmit.disabled = true;
         loading.classList.toggle('invisible', false);
+        
+        throbberAnim?.cancel();
+        throbberAnim = loading.animate([
+            { transform: 'scale(0%)', offset: 0 },
+            { transform: 'scale(100%)', offset: 1 }
+        ], {
+            duration: throbberPopDuration,
+            easing: easings.exponential.out
+        });
         
         fetch('/api/vision', {
            "method": "POST",
@@ -67,7 +83,19 @@ window.onload = function() {
                 }
                 response_txt.textContent = json.message ?? json.error;
                 response_txt.classList.toggle('invisible', false);
-                loading.classList.toggle('invisible', true);
+                
+                throbberAnim?.cancel()
+                throbberAnim = loading.animate([
+                    { transform: 'scale(0%)', offset: 1 }
+                ], {
+                    duration: throbberPopDuration,
+                    easing: easings.exponential.in
+                })
+                throbberAnim.onfinish = () => {
+                    loading.classList.toggle('invisible', true);
+                    imgsubmit.value = submitText;
+                    imgsubmit.disabled = false;
+                }
             })
     }
 }

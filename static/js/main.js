@@ -1,14 +1,17 @@
 import { get } from "./util/html.js";
 import { ImageSelectorElement } from "./classes/ImageSelectorElement.js";
 import easings from "./util/easings.js";
-const errorAnim = {};
+let errorAnim = {};
+let throbberAnim;
 const errorAnimDuration = 600;
+const throbberPopDuration = 300;
 window.onload = function () {
     let response_txt = get('response-txt');
     response_txt.classList.add('invisible');
     let imgform = get('img-form');
     let imgsubmit = get('submit-imgs');
     let imgmain = get('img-main');
+    const submitText = imgsubmit.value;
     let loading = get('loading');
     loading.classList.add('invisible');
     let img1 = new ImageSelectorElement(1, 'Referenciakép(ek) kiválasztása...').create(imgmain);
@@ -20,7 +23,17 @@ window.onload = function () {
     imgform.onsubmit = (ev) => {
         ev.preventDefault();
         let data = new FormData(imgform);
+        imgsubmit.value = '';
+        imgsubmit.disabled = true;
         loading.classList.toggle('invisible', false);
+        throbberAnim?.cancel();
+        throbberAnim = loading.animate([
+            { transform: 'scale(0%)', offset: 0 },
+            { transform: 'scale(100%)', offset: 1 }
+        ], {
+            duration: throbberPopDuration,
+            easing: easings.exponential.out
+        });
         fetch('/api/vision', {
             "method": "POST",
             "body": data
@@ -53,7 +66,18 @@ window.onload = function () {
             }
             response_txt.textContent = json.message ?? json.error;
             response_txt.classList.toggle('invisible', false);
-            loading.classList.toggle('invisible', true);
+            throbberAnim?.cancel();
+            throbberAnim = loading.animate([
+                { transform: 'scale(0%)', offset: 1 }
+            ], {
+                duration: throbberPopDuration,
+                easing: easings.exponential.in
+            });
+            throbberAnim.onfinish = () => {
+                loading.classList.toggle('invisible', true);
+                imgsubmit.value = submitText;
+                imgsubmit.disabled = false;
+            };
         });
     };
 };

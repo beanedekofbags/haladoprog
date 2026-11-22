@@ -12,17 +12,20 @@
             <form id="img-form">
                 <div class="row centered" id="img-main">
                 </div>
+                <div class="row centered">
+                    <input name="img-desc" id="img-desc" type="text" placeholder="Írj ide leírást...">
+                </div>
                 <hr>
                 <div class="row centered">
                     <p id="response-txt">Sample Error message</p>
                 </div>
                 <div class="row centered">
-                    <input type="submit" id="submit-imgs" value="Beküldés">
-                </div>
-                <div class="row centered" id="loading">
-                    <div class="throbber-container">
-                        <div class="circle"></div>
+                    <div id="loading">
+                        <div class="throbber-container">
+                            <div class="circle"></div>
+                        </div>
                     </div>
+                    <input type="submit" id="submit-imgs" value="Beküldés">
                 </div>
             </form>
         </section>

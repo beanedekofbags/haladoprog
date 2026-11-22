@@ -18,7 +18,14 @@ def index():
 @app.post('/api/vision')
 def vision():
     files = request.files
+    desc = request.form['img-desc']
     print(files)
+
+    if (not desc):
+        return {
+            "error": "No description provided!"
+        }
+    
     if ('img-input-1' not in files) or ('img-input-2' not in files):
         return {
             "error": "Incorrect form model!"
@@ -43,5 +50,6 @@ def vision():
     
     return processImages(
         [ImageInput(img.stream.read(), img.filename) for img in img1],
-        [ImageInput(img.stream.read(), img.filename) for img in img2]
+        [ImageInput(img.stream.read(), img.filename) for img in img2],
+        desc
     )
