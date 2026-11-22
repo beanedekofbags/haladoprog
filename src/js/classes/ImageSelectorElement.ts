@@ -1,4 +1,5 @@
 import easings from "../util/easings.js";
+import { ArrowButtonElement } from "./ArrowButtonElement.js"
 
 export class ImageSelectorElement {
     
@@ -15,8 +16,8 @@ export class ImageSelectorElement {
     private imgBack: HTMLImageElement;
     private container: HTMLDivElement;
     private message: HTMLParagraphElement;
-    private arrowLeft: HTMLButtonElement;
-    private arrowRight: HTMLButtonElement;
+    private arrowLeft: ArrowButtonElement;
+    private arrowRight: ArrowButtonElement;
     
     private urls: Array<string> = [];
     private oPage: number = 0;
@@ -71,6 +72,7 @@ export class ImageSelectorElement {
             label.appendChild(blurParent);
         }
         
+        /* 
         let arrowLeft = document.createElement('button'); {
             arrowLeft.type = 'button'
             arrowLeft.classList.add('arrow');
@@ -84,13 +86,20 @@ export class ImageSelectorElement {
             
             arrowRight.onclick = () => this.offsetPage(1);
         }
+        */
+        let arrowLeft = new ArrowButtonElement(0); {
+            arrowLeft.button.onclick = () => this.offsetPage(-1)
+        }
+        let arrowRight = new ArrowButtonElement(180); {
+            arrowRight.button.onclick = () => this.offsetPage(1)
+        }
             
         let container = document.createElement('div'); {
             container.classList.add('upload-field');
             
-            container.appendChild(arrowLeft!);
+            container.appendChild(arrowLeft.container);
             container.appendChild(label);
-            container.appendChild(arrowRight!);
+            container.appendChild(arrowRight.container);
             
             container.appendChild(input);
         }
@@ -126,8 +135,8 @@ export class ImageSelectorElement {
     
     private updateArrows() {
         let max = this.urls?.length ?? 1;
-        this.arrowLeft.classList.toggle('enabled', this.page > 0);
-        this.arrowRight.classList.toggle('enabled', this.page < max-1);
+        this.arrowLeft.container.classList.toggle('enabled', this.page > 0);
+        this.arrowRight.container.classList.toggle('enabled', this.page < max-1);
     }
     
     private updateImg() {

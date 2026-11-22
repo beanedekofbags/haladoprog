@@ -1,4 +1,5 @@
 import easings from "../util/easings.js";
+import { ArrowButtonElement } from "./ArrowButtonElement.js";
 export class ImageSelectorElement {
     static accepted = 'image/png,image/jpeg,image/webp';
     parallaxScale = 3;
@@ -62,24 +63,35 @@ export class ImageSelectorElement {
             label.appendChild(imgFrontTemp);
             label.appendChild(blurParent);
         }
-        let arrowLeft = document.createElement('button');
-        {
-            arrowLeft.type = 'button';
+        /*
+        let arrowLeft = document.createElement('button'); {
+            arrowLeft.type = 'button'
             arrowLeft.classList.add('arrow');
+            
             arrowLeft.onclick = () => this.offsetPage(-1);
         }
-        let arrowRight = document.createElement('button');
-        {
-            arrowRight.type = 'button';
+        
+        let arrowRight = document.createElement('button'); {
+            arrowRight.type = 'button'
             arrowRight.classList.add('arrow');
+            
             arrowRight.onclick = () => this.offsetPage(1);
+        }
+        */
+        let arrowLeft = new ArrowButtonElement(0);
+        {
+            arrowLeft.button.onclick = () => this.offsetPage(-1);
+        }
+        let arrowRight = new ArrowButtonElement(180);
+        {
+            arrowRight.button.onclick = () => this.offsetPage(1);
         }
         let container = document.createElement('div');
         {
             container.classList.add('upload-field');
-            container.appendChild(arrowLeft);
+            container.appendChild(arrowLeft.container);
             container.appendChild(label);
-            container.appendChild(arrowRight);
+            container.appendChild(arrowRight.container);
             container.appendChild(input);
         }
         this.message = message;
@@ -108,8 +120,8 @@ export class ImageSelectorElement {
     }
     updateArrows() {
         let max = this.urls?.length ?? 1;
-        this.arrowLeft.classList.toggle('enabled', this.page > 0);
-        this.arrowRight.classList.toggle('enabled', this.page < max - 1);
+        this.arrowLeft.container.classList.toggle('enabled', this.page > 0);
+        this.arrowRight.container.classList.toggle('enabled', this.page < max - 1);
     }
     updateImg() {
         let url = this.urls[this.page];
