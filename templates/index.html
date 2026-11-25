@@ -7,31 +7,39 @@
 </head>
 <body>
     <div id="container">
-        
-        <section>
-            <form id="img-form">
-                <div class="row centered" id="img-main">
-                </div>
-                <div class="row centered">
-                    <input name="img-desc" id="img-desc" type="text" placeholder="Írj ide leírást...">
-                </div>
-                <hr>
-                <div class="row centered">
-                    <p id="error-txt">Valamilyen hibaüzenet</p>
-                </div>
-                <div class="row centered">
+        <form id="upload-form">
+            <div class="row centered" id="img-list-box">
+            </div>
+            <div class="row centered">
+                <input name="img-desc" id="img-desc" type="text" placeholder="Írj ide leírást...">
+            </div>
+            <hr>
+            <div class="row centered">
+                <p id="txt-error">Valamilyen hibaüzenet</p>
+            </div>
+            <div class="row centered">
+                <div class="col" id="submit-container">
                     <div id="loading">
                         <div class="throbber-container">
                             <div class="circle"></div>
                         </div>
                     </div>
-                    <input type="submit" id="submit-imgs" value="Beküldés">
+                    <input type="submit" id="form-submit" value="Beküldés">
                 </div>
-            </form>
-        </section>
+            </div>
+        </form>
         
-        <section>
-        </section>
+        <div>
+            <div class="row centered">
+                <div id="btn-results-wrapper"></div>
+            </div>
+            <div class="row centered">
+                <div id="results-box">
+                    <p id="txt-result"></p>
+                </div>
+            </div>
+        </div>
+        
     </div>
     
     <script type="module" src="static/js/main.js"></script>

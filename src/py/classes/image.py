@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 class ImageSearchResult(BaseModel):
     confidence: int
+    count: int
 
 class ImageInput:
     def __init__(self, data: bytes, name: str):

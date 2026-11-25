@@ -47,6 +47,14 @@ def vision():
         return {
             "error": "Incorrect file type(s)!"
         }
+
+    result = [
+            { "name": "Abc", "results": { "confidence": 78, "count": 99 } }
+        ]
+    return {
+        "message": f"{result}",
+        "result": result
+    }
     
     return processImages(
         [ImageInput(img.stream.read(), img.filename) for img in img1],

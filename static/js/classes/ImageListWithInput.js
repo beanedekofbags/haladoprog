@@ -27,8 +27,8 @@ export class ImageListWithInput extends ImageList {
         }
         this.label = label;
         this.input = input;
-        this.container.replaceChild(label, this.imgContainer); // kicsit gagyin néz ki de működik
-        this.label.appendChild(this.imgContainer);
+        this.imgWrapperOuter.replaceChild(label, this.imgWrapperInner);
+        this.label.appendChild(this.imgWrapperInner);
         this.container.appendChild(input);
     }
 }

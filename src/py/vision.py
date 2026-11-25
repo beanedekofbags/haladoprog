@@ -7,23 +7,26 @@ model = "qwen3.5:4b"
 
 def processImages(ref_images: list[ImageInput], search_images: list[ImageInput], description: str):
     try:
-        # ideiglenes, nem túl jól működik egyelőre. adok majd egy szövegdobozt ahol a felhasználó megadhatja pontosan mit akar a referenciákból, hogy ne az AI-nak kelljen kitalálni lol
+        # Find a pattern in the reference image(s) that matches the provided description, then, only once you find a matching pattern, try to match the reference images against the target image using this pattern and the description provided. 
         setup = {'role':'system', 'content': f"""
-                You are provided a list of images. Every image until the last one is to be used as your reference. The last image in the list is the target image which you will be comparing the references against. If there are only two images, then the first one is the reference, the second one is the target.
-                Find a pattern in the reference image(s) that matches the description: "{description}", then, if and only if you find a pattern matching the description, match the reference images against the target image using this pattern. 
-                It is possible that there is no matching pattern between the references and the target.
+                You are provided a list of images and a description. Every image until the last one is to be used as your reference. The last image in the list is the target image which you will be comparing the references against. If there are only two images, then the first one is the reference, the second one is the target.
+                Your task is to match the reference image (or images) against the target image. Use the description provided by the user to narrow down the point of comparison between the reference image (or images) and the target image.
+                It is possible that there are no matches between the reference (or references) and the target.
                 Your output will be a JSON response with the following structure:
-                    - "confidence" = How confident you are (0-100) that there is a matching pattern given the above instructions.
+                    - "count" = If there is a matching pattern in the target image, how many occurrences there are.
+                    - "confidence" = How confident you are (0%-100%) that there is at least one occurrence of a matching pattern in the target image.
                 """}
 
         results = []
         for search in search_images:
+            print(f"Analyzing {search.name}")
             response = ollama.chat(
                 model=model,
                 messages=[
                     setup,
                     {
                         'role':'user',
+                        'content': f"The description is: \"{description}\".",
                         'images': [ *[ref.data for ref in ref_images], search.data ]
                     }
                 ],

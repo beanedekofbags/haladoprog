@@ -1,12 +1,12 @@
 export class ArrowButton {
-    arrow;
+    icon;
     button;
     container;
     constructor(direction) {
         let icon = document.createElement('div');
         {
             icon.classList.add('icon');
-            icon.style.transform = `rotate(${135 + direction}deg) translate(-20%, -20%)`;
+            icon.style.transform = `rotate(${135 + direction}deg) translate(-15%, -15%)`;
         }
         let button = document.createElement('button');
         {
@@ -18,12 +18,18 @@ export class ArrowButton {
             container.appendChild(icon);
             container.appendChild(button);
         }
-        this.arrow = icon;
+        this.icon = icon;
         this.button = button;
         this.container = container;
     }
     create(parent) {
         parent.appendChild(this.container);
         return this;
+    }
+    setDirection(direction) {
+        this.icon.style.transform = `rotate(${135 + direction}deg) translate(-15%, -15%)`;
+    }
+    toggle(toggle) {
+        this.button.disabled = !toggle;
     }
 }

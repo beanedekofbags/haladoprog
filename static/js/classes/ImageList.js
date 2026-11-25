@@ -13,7 +13,8 @@ export class ImageList {
     imgBack;
     arrowL;
     arrowR;
-    imgContainer;
+    imgWrapperOuter;
+    imgWrapperInner;
     container;
     urls = [];
     oPage = 0;
@@ -45,27 +46,34 @@ export class ImageList {
             imgBackWrapper.style.zIndex = '1';
             imgBackWrapper.appendChild(imgBack);
         }
-        let imgContainer = document.createElement('div');
+        let imgWrapperInner = document.createElement('div');
         {
-            imgContainer.classList.add('img-container');
-            imgContainer.appendChild(missingMessage);
-            imgContainer.appendChild(imgFrontA);
-            imgContainer.appendChild(imgFrontB);
-            imgContainer.appendChild(imgBackWrapper);
+            imgWrapperInner.classList.add('img-wrapper-inner');
+            imgWrapperInner.appendChild(missingMessage);
+            imgWrapperInner.appendChild(imgFrontA);
+            imgWrapperInner.appendChild(imgFrontB);
+            imgWrapperInner.appendChild(imgBackWrapper);
+        }
+        let imgWrapperOuter = document.createElement('div');
+        {
+            imgWrapperOuter.classList.add('img-wrapper-outer');
+            imgWrapperOuter.appendChild(imgWrapperInner);
         }
         let arrowL = new ArrowButton(0);
         {
+            arrowL.button.classList.add('h');
             arrowL.button.onclick = () => this.offsetPage(-1);
         }
         let arrowR = new ArrowButton(180);
         {
+            arrowR.button.classList.add('h');
             arrowR.button.onclick = () => this.offsetPage(1);
         }
         let container = document.createElement('div');
         {
             container.classList.add('imglist-container');
             container.appendChild(arrowL.container);
-            container.appendChild(imgContainer);
+            container.appendChild(imgWrapperOuter);
             container.appendChild(arrowR.container);
         }
         this.missingMessage = missingMessage;
@@ -75,7 +83,8 @@ export class ImageList {
         this.imgBack = imgBack;
         this.arrowL = arrowL;
         this.arrowR = arrowR;
-        this.imgContainer = imgContainer;
+        this.imgWrapperInner = imgWrapperInner;
+        this.imgWrapperOuter = imgWrapperOuter;
         this.container = container;
         this.updateArrows();
     }
@@ -136,8 +145,8 @@ export class ImageList {
     }
     updateArrows() {
         let max = this.urls?.length ?? 1;
-        this.arrowL.container.classList.toggle('enabled', this.page > 0);
-        this.arrowR.container.classList.toggle('enabled', this.page < max - 1);
+        this.arrowL.toggle(this.page > 0);
+        this.arrowR.toggle(this.page < max - 1);
     }
     updateImg() {
         let url = this.urls[this.page];
