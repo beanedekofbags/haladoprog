@@ -6,8 +6,8 @@ let throbberAnim;
 const errorAnimDuration = 600;
 const throbberPopDuration = 300;
 window.onload = function () {
-    let response_txt = get('response-txt');
-    response_txt.classList.add('invisible');
+    let errorTxt = get('error-txt');
+    errorTxt.classList.add('invisible');
     let imgform = get('img-form');
     let imgsubmit = get('submit-imgs');
     let imgmain = get('img-main');
@@ -57,15 +57,16 @@ window.onload = function () {
                     easing: easings.bouncy.out
                 });
                 errorAnim['color'] = imgsubmit.animate([
-                    { backgroundColor: 'rgb(219, 127, 155)', offset: 1.0 }
+                    { backgroundColor: 'rgb(219, 127, 155)', offset: 1.0 },
+                    { borderColor: 'rgb(105, 36, 57)', offset: 1.0 }
                 ], {
                     duration: errorAnimDuration,
                     easing: easings.exponential.out,
                     direction: "reverse"
                 });
             }
-            response_txt.textContent = json.message ?? json.error;
-            response_txt.classList.toggle('invisible', false);
+            errorTxt.textContent = json.message ?? json.error;
+            errorTxt.classList.toggle('invisible', false);
             throbberAnim?.cancel();
             throbberAnim = loading.animate([
                 { transform: 'scale(0%)', offset: 1 }

@@ -10,8 +10,8 @@ const throbberPopDuration = 300;
 
 window.onload = function() {
     
-    let response_txt = get('response-txt') as HTMLParagraphElement;
-    response_txt.classList.add('invisible');
+    let errorTxt = get('error-txt') as HTMLParagraphElement;
+    errorTxt.classList.add('invisible');
     
     let imgform = get('img-form') as HTMLFormElement;
     let imgsubmit = get('submit-imgs') as HTMLInputElement;
@@ -73,7 +73,8 @@ window.onload = function() {
                         easing: easings.bouncy.out
                     });
                     errorAnim['color'] = imgsubmit.animate([
-                        { backgroundColor: 'rgb(219, 127, 155)', offset: 1.0 }
+                        { backgroundColor: 'rgb(219, 127, 155)', offset: 1.0 },
+                        { borderColor: 'rgb(105, 36, 57)', offset: 1.0 }
                     ],
                     {
                         duration: errorAnimDuration,
@@ -81,8 +82,8 @@ window.onload = function() {
                         direction: "reverse"
                     });
                 }
-                response_txt.textContent = json.message ?? json.error;
-                response_txt.classList.toggle('invisible', false);
+                errorTxt.textContent = json.message ?? json.error;
+                errorTxt.classList.toggle('invisible', false);
                 
                 throbberAnim?.cancel()
                 throbberAnim = loading.animate([

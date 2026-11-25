@@ -24,11 +24,10 @@ export class ImageListWithInput extends ImageList {
         let label = document.createElement('label');
         {
             label.htmlFor = htmlInputId;
-            label.classList.add('img-container');
         }
         this.label = label;
         this.input = input;
-        this.container.replaceChild(label, this.imgContainer); // szükséges hogy a teljes kép kattintható legyen, lehetne szebben is megoldani de mindegy
+        this.container.replaceChild(label, this.imgContainer); // kicsit gagyin néz ki de működik
         this.label.appendChild(this.imgContainer);
         this.container.appendChild(input);
     }

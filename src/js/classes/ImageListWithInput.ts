@@ -31,7 +31,6 @@ export class ImageListWithInput extends ImageList {
         
         let label = document.createElement('label'); {
             label.htmlFor = htmlInputId;
-            label.classList.add('img-container');
         }
         
         this.label = label;
