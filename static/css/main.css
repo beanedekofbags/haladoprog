@@ -48,21 +48,21 @@ body {
         justify-content: space-evenly;
     }
 
-.upload-field {
+.imglist-container {
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 30px;
 }
-    .upload-field>.arrow-container {
+    .imglist-container>.arrow-container {
         width: 40px;
         height: 80%;
     }
     
-    .upload-field>input[type="file"] {
+    .imglist-container>input[type="file"] {
         display: none;
     }
-    .upload-field .img-container {
+    .imglist-container .img-container {
         display: flex;
         flex-direction: column-reverse;
         align-items: center;
@@ -88,7 +88,7 @@ body {
         
         cursor: pointer;
     }
-        .upload-field .img-container>.overlay-text {
+        .imglist-container .img-container>.overlay-text {
             min-width: 0;
             max-width: inherit;
             overflow-wrap: break-word;
@@ -99,7 +99,7 @@ body {
             opacity: 0.6;
         }
     
-        .upload-field .img-container img {
+        .imglist-container .img-container img {
             position:absolute;
             
             border: inherit;
@@ -110,19 +110,19 @@ body {
             object-position: center;
         }
         
-        .upload-field .img-container>.img-front {
+        .imglist-container .img-container>.img-front {
             max-width: calc(var(--image-size)*0.95);
             max-height: calc(var(--image-size)*0.95);
         }
         
-        .upload-field .img-container>.img-back {
+        .imglist-container .img-container>.img-back {
             position: absolute;
             overflow: hidden;
             margin: -20px;
             width: 120%;
             height: 120%;
         }
-            .upload-field .img-container>.img-back>img {
+            .imglist-container .img-container>.img-back>img {
                 filter: blur(8px) brightness(65%);
                 opacity: 0.85;
                 object-fit: cover;

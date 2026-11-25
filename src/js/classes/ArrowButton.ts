@@ -1,4 +1,4 @@
-export class ArrowButtonElement {
+export class ArrowButton {
     
     public arrow: HTMLDivElement;
     public button: HTMLButtonElement;

@@ -1,5 +1,5 @@
 import { get } from "./util/html.js";
-import { ImageSelectorElement } from "./classes/ImageSelectorElement.js";
+import { ImageListWithInput } from "./classes/ImageListWithInput.js";
 import easings from "./util/easings.js";
 let errorAnim = {};
 let throbberAnim;
@@ -14,8 +14,8 @@ window.onload = function () {
     const submitText = imgsubmit.value;
     let loading = get('loading');
     loading.classList.add('invisible');
-    let img1 = new ImageSelectorElement(1, 'Referenciakép(ek) kiválasztása...').create(imgmain);
-    let img2 = new ImageSelectorElement(2, 'Elemzendő kép(ek) kiválasztása...').create(imgmain);
+    let img1 = new ImageListWithInput(1, 'Referenciakép(ek) kiválasztása...').create(imgmain);
+    let img2 = new ImageListWithInput(2, 'Elemzendő kép(ek) kiválasztása...').create(imgmain);
     window.onmousemove = function (ev) {
         img1.moveWithCursor(ev);
         img2.moveWithCursor(ev);

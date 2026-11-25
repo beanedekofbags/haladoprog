@@ -1,0 +1,35 @@
+import { ImageList } from "./ImageList.js";
+export class ImageListWithInput extends ImageList {
+    parallaxScale = 3;
+    parallaxDistance = 400;
+    parallaxEaseAmount = 250;
+    flipDuration = 500;
+    input;
+    label;
+    constructor(id, text, multiple = true) {
+        super(id, text);
+        const htmlInputId = `img-input-${id}`;
+        let input = document.createElement('input');
+        {
+            input.id = htmlInputId;
+            input.name = htmlInputId;
+            input.type = "file";
+            input.accept = ImageList.accepted;
+            input.multiple = multiple;
+            input.onchange = (ev) => {
+                const files = ev.target.files;
+                this.setUrls(files);
+            };
+        }
+        let label = document.createElement('label');
+        {
+            label.htmlFor = htmlInputId;
+            label.classList.add('img-container');
+        }
+        this.label = label;
+        this.input = input;
+        this.container.replaceChild(label, this.imgContainer); // szükséges hogy a teljes kép kattintható legyen, lehetne szebben is megoldani de mindegy
+        this.label.appendChild(this.imgContainer);
+        this.container.appendChild(input);
+    }
+}
