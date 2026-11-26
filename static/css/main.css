@@ -1,6 +1,7 @@
 :root {
     --bg-color-main: white;
     --image-size: 500px;
+    --image-size-small: 350px;
 }
 
 body * {
@@ -12,6 +13,7 @@ body * {
 @media screen and (max-width: 980px) {
     :root {
         --image-size: 400px;
+        --image-size-small: 350px;
     }
 }
 
@@ -19,6 +21,7 @@ body * {
 @media screen and (max-width: 736px) {
     :root {
         --image-size: 300px;
+        --image-size-small: 200px;
     }
 }
 
@@ -30,23 +33,6 @@ body {
 #img-list-box {
     margin: auto;
     width: 80%;
-}
-
-button.h:enabled:hover,
-input[type="submit"].h:enabled:hover {
-    scale: 1.0 1.05;
-}
-button.h:enabled:active,
-input[type="submit"].h:enabled:active {
-    scale: 1.0 0.97;
-}
-button.v:enabled:hover,
-input[type="submit"].v:enabled:hover {
-    scale: 1.1 1.0;
-}
-button.v:enabled:active,
-input[type="submit"].v:enabled:active {
-    scale: 0.95 1.0;
 }
 
 .row {
@@ -88,6 +74,9 @@ input[type="submit"].v:enabled:active {
     .imglist-container .img-wrapper-outer {
         margin: 0 12px 0 12px;
     }
+    .imglist-container label {
+        cursor: pointer;
+    }
     .imglist-container .img-wrapper-inner {
         display: flex;
         flex-direction: column-reverse;
@@ -111,8 +100,10 @@ input[type="submit"].v:enabled:active {
         align-content: center;
         justify-content: center;
         box-sizing: content-box;
-        
-        cursor: pointer;
+    }
+    .imglist-container.small .img-wrapper-inner {
+        width: var(--image-size-small);
+        height: var(--image-size-small);
     }
         .imglist-container .img-wrapper-inner>.overlay-text {
             min-width: 0;
@@ -137,8 +128,8 @@ input[type="submit"].v:enabled:active {
         }
         
         .imglist-container .img-wrapper-inner>.img-front {
-            max-width: calc(var(--image-size)*0.95);
-            max-height: calc(var(--image-size)*0.95);
+            max-width: 95%;
+            max-height: 95%;
         }
         
         .imglist-container .img-wrapper-inner>.img-back {
@@ -309,7 +300,8 @@ form input[type="submit"] {
 }
 
 #results-box {
-    display: flex;
+    display: grid;
+    grid-template-rows: 0fr;
     align-items: inherit;
     justify-content: inherit;
     
@@ -322,7 +314,23 @@ form input[type="submit"] {
     border-bottom-right-radius: 10px;
     
     margin: 10px 0 10px 0;
-    padding: 10px;
+    
+    overflow: hidden;
+}
+
+#results-content {
+    min-height: 0;
+}
+
+#results-content {
+    p,h1,h2,h3 {
+        text-align: center;
+    }
+}
+
+#results-img-wrapper.imglist-container .img-wrapper-inner {
+    width: var(--image-size-small);
+    height: var(--image-size-small)
 }
 
 @keyframes spin { 

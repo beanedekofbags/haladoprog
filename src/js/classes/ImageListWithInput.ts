@@ -4,11 +4,6 @@ import { ImageList } from "./ImageList.js";
 
 export class ImageListWithInput extends ImageList {
     
-    public parallaxScale = 3;
-    public parallaxDistance = 400;
-    public parallaxEaseAmount = 250;
-    public flipDuration = 500;
-    
     public input: HTMLInputElement;
     protected label: HTMLLabelElement;
     

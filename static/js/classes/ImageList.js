@@ -16,8 +16,8 @@ export class ImageList {
     imgWrapperOuter;
     imgWrapperInner;
     container;
-    urls = [];
     oPage = 0;
+    urls = [];
     page = 0;
     flipAnimations = {};
     constructor(id, text) {
@@ -61,12 +61,10 @@ export class ImageList {
         }
         let arrowL = new ArrowButton(0);
         {
-            arrowL.button.classList.add('h');
             arrowL.button.onclick = () => this.offsetPage(-1);
         }
         let arrowR = new ArrowButton(180);
         {
-            arrowR.button.classList.add('h');
             arrowR.button.onclick = () => this.offsetPage(1);
         }
         let container = document.createElement('div');
@@ -88,12 +86,18 @@ export class ImageList {
         this.container = container;
         this.updateArrows();
     }
+    getUrls() {
+        return this.urls;
+    }
     setUrls(imgs) {
         this.urls = [];
         if (imgs?.length) {
             for (let i = 0; i < imgs.length; i++) {
                 let url = '';
-                if (imgs instanceof FileList) {
+                if (imgs[i] instanceof File) {
+                    url = window.URL.createObjectURL(imgs[i]);
+                }
+                else if (imgs instanceof FileList) {
                     url = window.URL.createObjectURL(imgs.item(i));
                 }
                 else {
@@ -113,6 +117,7 @@ export class ImageList {
     }
     offsetPage(offset) {
         this.setPage(this.page + offset);
+        this.container.dispatchEvent(new CustomEvent("flipped", { detail: { offset: offset } }));
     }
     setPage(page) {
         let max = this.urls?.length ?? 1;
@@ -126,7 +131,6 @@ export class ImageList {
     }
     moveWithCursor(ev) {
         if (this.imgBack !== undefined) {
-            console.log("mouse moved!!!!");
             const rect = this.imgBack.getBoundingClientRect();
             const x = ev.pageX;
             const y = ev.pageY;
@@ -134,7 +138,6 @@ export class ImageList {
             const centerY = rect.y;
             let offsetX = (x - centerX) / this.parallaxDistance * this.parallaxScale;
             let offsetY = (y - centerY) / this.parallaxDistance * this.parallaxScale;
-            console.log(`x: ${x}, y: ${y}`);
             this.imgBack.animate([
                 { translate: `${offsetX}px ${offsetY}px` }
             ], {

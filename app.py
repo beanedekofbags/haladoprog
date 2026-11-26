@@ -1,4 +1,7 @@
-from flask import Flask, request, abort
+import base64
+import io
+
+from flask import Flask, request, url_for, send_file
 from flask import render_template as template
 from src.py.vision import processImages
 from src.py.classes.image import ImageInput
@@ -48,12 +51,15 @@ def vision():
             "error": "Incorrect file type(s)!"
         }
 
-    result = [
-            { "name": "Abc", "results": { "confidence": 78, "count": 99 } }
-        ]
+    results = []
+    print("HELLO")
+    for img in img2:
+        results.append(
+            { "name": img.filename, "results": { "confidence": 78, "count": 99 } }
+        )
     return {
-        "message": f"{result}",
-        "result": result
+        "message": f"{results}",
+        "result": results
     }
     
     return processImages(

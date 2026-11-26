@@ -2,8 +2,10 @@ import { get } from "./util/html.js";
 import { ImageListWithInput } from "./classes/ImageListWithInput.js";
 import easings from "./util/easings.js";
 import { ArrowButton } from "./classes/ArrowButton.js";
+import { ImageList } from "./classes/ImageList.js";
 let errorAnim = {};
 let throbberAnim;
+let resultAnim;
 const errorAnimDuration = 600;
 const throbberPopDuration = 300;
 window.onload = function () {
@@ -19,19 +21,21 @@ window.onload = function () {
     let img2 = new ImageListWithInput(2, 'Elemzendő kép(ek) kiválasztása...').create(imgListBox);
     let imageSearchResult;
     let btnResults = new ArrowButton(-90);
-    btnResults.button.classList.add('v');
     btnResults.toggle(false);
     btnResults.create(get('btn-results-wrapper'));
     let resultsBox = get('results-box');
     resultsBox.classList.toggle('inactive', true);
+    let img3 = new ImageList(3, 'Nincs megjelenítendő kép').create(get('results-img-wrapper'));
+    img3.container.classList.add('small');
     let txtResult = get('txt-result');
     window.onmousemove = function (ev) {
         img1.moveWithCursor(ev);
         img2.moveWithCursor(ev);
+        img3.moveWithCursor(ev);
     };
     uploadForm.onsubmit = (ev) => {
         ev.preventDefault();
-        let data = new FormData(uploadForm);
+        let formData = new FormData(uploadForm);
         imgSubmit.value = '';
         imgSubmit.disabled = true;
         loading.classList.toggle('invisible', false);
@@ -47,7 +51,7 @@ window.onload = function () {
         });
         fetch('/api/vision', {
             "method": "POST",
-            "body": data
+            "body": formData
         })
             .then(res => {
             if (res.ok)
@@ -82,11 +86,14 @@ window.onload = function () {
             txtError.textContent = json.message ?? json.error ?? '';
             if (json.result) {
                 imageSearchResult = json.result;
+                let formImgs = formData.getAll('img-input-2');
+                img3.setUrls((formImgs));
+                console.log(formData.getAll('img-input-2'));
             }
             txtError.classList.toggle('invisible', false);
             throbberAnim?.cancel();
             throbberAnim = loading.animate([
-                { transform: 'scale(0%)', offset: 1 }
+                { transform: 'scale(0%)', offset: 1.0 }
             ], {
                 duration: throbberPopDuration,
                 easing: easings.exponential.in
@@ -99,13 +106,35 @@ window.onload = function () {
         });
     };
     let btnResultsOn = false;
+    let paddingTop = resultsBox.style.paddingTop;
+    let paddingBottom = resultsBox.style.paddingBottom;
+    img3.container.addEventListener("flipped", () => {
+        let r = imageSearchResult[img3.page];
+        txtResult.textContent = `Name: ${r.name}, Confidence: ${r.results.confidence}, Count: ${r.results.count}`;
+    });
     btnResults.button.onclick = () => {
         btnResultsOn = !btnResultsOn && imageSearchResult !== null; // kikapcsolva marad ha nincs adat
         btnResults.setDirection(btnResultsOn ? 90 : -90);
-        resultsBox.classList.toggle('inactive', !btnResultsOn);
+        resultAnim?.pause();
+        resultAnim = resultsBox.animate([
+            { paddingTop: `${btnResultsOn ? paddingTop : 0}px`, offset: 1.0 },
+            { paddingBottom: `${btnResultsOn ? paddingBottom : 0}px`, offset: 1.0 },
+            { gridTemplateRows: `${btnResultsOn ? 1 : 0}fr`, offset: 1.0 },
+            { translate: `0 ${btnResultsOn ? 0 : -40}px`, offset: 1.0 }
+        ], {
+            duration: 500,
+            easing: easings.exponential.out,
+            fill: "forwards"
+        });
         if (btnResultsOn) {
-            let r = imageSearchResult[0];
+            resultsBox.classList.toggle('inactive', false);
+            let r = imageSearchResult[img3.page];
             txtResult.textContent = `Name: ${r.name}, Confidence: ${r.results.confidence}, Count: ${r.results.count}`;
+        }
+        else {
+            resultAnim.onfinish = () => {
+                resultsBox.classList.toggle('inactive', true);
+            };
         }
     };
 };

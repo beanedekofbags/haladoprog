@@ -10,20 +10,20 @@ export class ImageList {
     public parallaxEaseAmount = 250;
     public flipDuration = 500;
     
-    protected missingMessage: HTMLParagraphElement;
+    public missingMessage: HTMLParagraphElement;
     public imgFrontA: HTMLImageElement;
     public imgFrontB: HTMLImageElement;
     protected imgBackWrapper: HTMLDivElement;
     protected imgBack: HTMLImageElement;
-    protected arrowL: ArrowButton;
-    protected arrowR: ArrowButton;
+    public arrowL: ArrowButton;
+    public arrowR: ArrowButton;
     protected imgWrapperOuter: HTMLDivElement;
     protected imgWrapperInner: HTMLDivElement;
-    protected container: HTMLDivElement;
+    public container: HTMLDivElement;
     
-    protected urls: Array<string> = [];
     protected oPage: number = 0;
-    protected page: number = 0;
+    protected urls: Array<string> = [];
+    public page: number = 0;
     
     private flipAnimations: { [id: string] : Animation } = {};
     
@@ -70,12 +70,10 @@ export class ImageList {
         }
         
         let arrowL = new ArrowButton(0); {
-            arrowL.button.classList.add('h');
-            arrowL.button.onclick = () => this.offsetPage(-1)
+            arrowL.button.onclick = () => this.offsetPage(-1);
         }
         let arrowR = new ArrowButton(180); {
-            arrowR.button.classList.add('h');
-            arrowR.button.onclick = () => this.offsetPage(1)
+            arrowR.button.onclick = () => this.offsetPage(1);
         }
             
         let container = document.createElement('div'); {
@@ -102,12 +100,19 @@ export class ImageList {
         this.updateArrows();
     }
     
-    public setUrls(imgs: Array<string> | FileList | null) {
+    public getUrls(): Array<string> {
+        return this.urls;
+    }
+    
+    public setUrls(imgs: Array<string> | Array<File> | FileList | null) {
         this.urls = [];
         if (imgs?.length) {
             for (let i = 0; i < imgs.length; i++) {
                 let url = '';
-                if (imgs instanceof FileList) {
+                if (imgs[i] instanceof File) {
+                    url = window.URL.createObjectURL(<File>imgs[i]);
+                }
+                else if (imgs instanceof FileList) {
                     url = window.URL.createObjectURL(imgs.item(i)!)
                 }
                 else {
@@ -129,6 +134,7 @@ export class ImageList {
     
     public offsetPage(offset: number) {
         this.setPage(this.page + offset);
+        this.container.dispatchEvent(new CustomEvent("flipped", { detail: { offset: offset } }))
     }
     public setPage(page: number) {
         let max = this.urls?.length ?? 1;
@@ -143,7 +149,6 @@ export class ImageList {
     
     public moveWithCursor(ev: MouseEvent) {
         if (this.imgBack !== undefined) {
-            console.log("mouse moved!!!!");
             const rect = this.imgBack.getBoundingClientRect();
             
             const x = ev.pageX; const y = ev.pageY;
@@ -152,7 +157,6 @@ export class ImageList {
             let offsetX = (x - centerX) / this.parallaxDistance * this.parallaxScale;
             let offsetY = (y - centerY) / this.parallaxDistance * this.parallaxScale;
             
-            console.log(`x: ${x}, y: ${y}`);
             this.imgBack.animate([
                 { translate: `${offsetX}px ${offsetY}px` }
             ], {

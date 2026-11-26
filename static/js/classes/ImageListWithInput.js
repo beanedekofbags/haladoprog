@@ -1,9 +1,5 @@
 import { ImageList } from "./ImageList.js";
 export class ImageListWithInput extends ImageList {
-    parallaxScale = 3;
-    parallaxDistance = 400;
-    parallaxEaseAmount = 250;
-    flipDuration = 500;
     input;
     label;
     constructor(id, text, multiple = true) {
