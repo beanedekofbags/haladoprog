@@ -13,8 +13,8 @@ def processImages(ref_images: list[ImageInput], search_images: list[ImageInput],
                 Your task is to match the reference image (or images) against the target image. Use the description provided by the user to narrow down the point of comparison between the reference image (or images) and the target image.
                 It is possible that there are no matches between the reference (or references) and the target.
                 Your output will be a JSON response with the following structure:
-                    - "count" = If there is a matching pattern in the target image, how many occurrences there are.
-                    - "confidence" = How confident you are (0%-100%) that there is at least one occurrence of a matching pattern in the target image.
+                    - "count" = If there is a matching pattern in the target image, how many occurrences of it there are.
+                    - "confidence" = If there is a matching pattern in the target image, a confidence value (0-100) based on how accurately the patterns match. 0 means there is no match at all, 100 means it is a perfect match.
                 """}
 
         results = []
