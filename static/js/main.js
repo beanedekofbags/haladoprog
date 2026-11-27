@@ -3,6 +3,7 @@ import { ImageListWithInput } from "./classes/ImageListWithInput.js";
 import easings from "./util/easings.js";
 import { ArrowButton } from "./classes/ArrowButton.js";
 import { ImageList } from "./classes/ImageList.js";
+import { TimeoutAnimation } from "./classes/TimeoutAnimation.js";
 let errorAnim = {};
 let throbberAnim;
 let resultAnim;
@@ -24,15 +25,18 @@ window.onload = function () {
     btnResults.toggle(false);
     btnResults.create(get('btn-results-wrapper'));
     let resultsBox = get('results-box');
-    resultsBox.classList.toggle('inactive', true);
+    resultsBox.classList.toggle('invisible', true);
+    let confidenceValue = get('confidence-value');
+    let countValue = get('count-value');
     let img3 = new ImageList(3, 'Nincs megjelenítendő kép').create(get('results-img-wrapper'));
     img3.container.classList.add('small');
-    let txtResult = get('txt-result');
+    let imgTitle = get('img-title');
     window.onmousemove = function (ev) {
         img1.moveWithCursor(ev);
         img2.moveWithCursor(ev);
         img3.moveWithCursor(ev);
     };
+    let visitedResults = [];
     uploadForm.onsubmit = (ev) => {
         ev.preventDefault();
         let formData = new FormData(uploadForm);
@@ -40,7 +44,6 @@ window.onload = function () {
         imgSubmit.disabled = true;
         loading.classList.toggle('invisible', false);
         txtError.classList.toggle('invisible', true);
-        btnResults.toggle(false);
         throbberAnim?.cancel();
         throbberAnim = loading.animate([
             { transform: 'scale(0%)', offset: 0 },
@@ -84,11 +87,19 @@ window.onload = function () {
                 btnResults.toggle(true);
             }
             txtError.textContent = json.message ?? json.error ?? '';
-            if (json.result) {
-                imageSearchResult = json.result;
+            if (json.data) {
+                imageSearchResult = json.data;
+                console.log(imageSearchResult);
                 let formImgs = formData.getAll('img-input-2');
                 img3.setUrls((formImgs));
-                console.log(formData.getAll('img-input-2'));
+                visitedResults = [];
+                if (btnResultsOn) {
+                    animateResults(imageSearchResult[img3.page], img3.page);
+                }
+            }
+            else {
+                btnResultsOn = false;
+                resultsToggle();
             }
             txtError.classList.toggle('invisible', false);
             throbberAnim?.cancel();
@@ -108,12 +119,42 @@ window.onload = function () {
     let btnResultsOn = false;
     let paddingTop = resultsBox.style.paddingTop;
     let paddingBottom = resultsBox.style.paddingBottom;
+    let countUpFromZero = (anim, element, max, format) => {
+        anim.setAnimation((f) => {
+            let f2 = 1 - (1 - f) ** 3; // cubic-out
+            let num = Math.round(max * f2);
+            let text = format.replaceAll('$', `${num}`);
+            element.textContent = text;
+        });
+    };
+    let confidence = new TimeoutAnimation();
+    let count = new TimeoutAnimation();
+    let animateResults = (r, page) => {
+        if (!visitedResults.includes(page)) {
+            let duration = 1600;
+            confidence.cancel();
+            count.cancel();
+            countUpFromZero(confidence, confidenceValue, r.results.confidence, '$%');
+            countUpFromZero(count, countValue, r.results.count, '$ db');
+            confidence.animate(duration, 32);
+            count.animate(duration / 2, 24);
+            visitedResults.push(page);
+        }
+        else {
+            confidence.cancel();
+            count.cancel();
+            confidenceValue.textContent = `${r.results.confidence}%`;
+            countValue.textContent = `${r.results.count} db`;
+        }
+    };
     img3.container.addEventListener("flipped", () => {
+        console.log(imageSearchResult);
+        console.log(img3.page);
         let r = imageSearchResult[img3.page];
-        txtResult.textContent = `Name: ${r.name}, Confidence: ${r.results.confidence}, Count: ${r.results.count}`;
+        imgTitle.textContent = `${r.name}`;
+        animateResults(r, img3.page);
     });
-    btnResults.button.onclick = () => {
-        btnResultsOn = !btnResultsOn && imageSearchResult !== null; // kikapcsolva marad ha nincs adat
+    let resultsToggle = () => {
         btnResults.setDirection(btnResultsOn ? 90 : -90);
         resultAnim?.pause();
         resultAnim = resultsBox.animate([
@@ -127,14 +168,19 @@ window.onload = function () {
             fill: "forwards"
         });
         if (btnResultsOn) {
-            resultsBox.classList.toggle('inactive', false);
+            resultsBox.classList.toggle('invisible', false);
             let r = imageSearchResult[img3.page];
-            txtResult.textContent = `Name: ${r.name}, Confidence: ${r.results.confidence}, Count: ${r.results.count}`;
+            imgTitle.textContent = `${r.name}`;
+            animateResults(r, img3.page);
         }
         else {
             resultAnim.onfinish = () => {
-                resultsBox.classList.toggle('inactive', true);
+                resultsBox.classList.toggle('invisible', true);
             };
         }
+    };
+    btnResults.button.onclick = () => {
+        btnResultsOn = !btnResultsOn && imageSearchResult !== null; // kikapcsolva marad ha nincs adat
+        resultsToggle();
     };
 };

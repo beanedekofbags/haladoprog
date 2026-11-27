@@ -51,16 +51,16 @@ def vision():
             "error": "Incorrect file type(s)!"
         }
 
-    results = []
-    print("HELLO")
-    for img in img2:
-        results.append(
-            { "name": img.filename, "results": { "confidence": 78, "count": 99 } }
-        )
-    return {
-        "message": f"{results}",
-        "result": results
-    }
+    #teszt értékek
+    #results = []
+    #for img in img2:
+    #    results.append(
+    #        { "name": img.filename, "results": { "confidence": 78, "count": 99 } }
+    #    )
+    #return {
+    #    "message": f"{results}",
+    #    "result": results
+    #}
     
     return processImages(
         [ImageInput(img.stream.read(), img.filename) for img in img1],

@@ -27,7 +27,7 @@ def processImages(ref_images: list[ImageInput], search_images: list[ImageInput],
                     {
                         'role':'user',
                         'content': f"The description is: \"{description}\".",
-                        'images': [ *[ref.data for ref in ref_images], search.data ]
+                        'images': [ *[ref.imgdata for ref in ref_images], search.imgdata ]
                     }
                 ],
                 options = {
@@ -36,10 +36,10 @@ def processImages(ref_images: list[ImageInput], search_images: list[ImageInput],
                 },
                 format=ImageSearchResult.model_json_schema()
             )
-            json = ImageSearchResult.model_validate_json(response.message.content)
-            results.append(ImageOutput(search.name, list(json)).json())
+            result = ImageSearchResult.model_validate_json(response.message.content)
+            results.append(ImageOutput(search.name, result).json())
         return {
-            "message": f"{results}"
+            "data": results
         }
     except Exception as e:
         return {

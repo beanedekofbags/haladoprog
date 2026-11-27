@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
 :root {
     --bg-color-main: white;
     --image-size: 500px;
     --image-size-small: 350px;
+    --bottom-width: 30%;
 }
 
 body * {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
     font-weight: 400;
 }
 
@@ -14,14 +18,16 @@ body * {
     :root {
         --image-size: 400px;
         --image-size-small: 350px;
+        --bottom-width: 80%;
     }
 }
 
 /* small, elméletileg */
 @media screen and (max-width: 736px) {
     :root {
-        --image-size: 300px;
+        --image-size: 200px;
         --image-size-small: 200px;
+        --bottom-width: 100%;
     }
 }
 
@@ -61,11 +67,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 30px;
+    margin: 10px 30px 10px 30px;
 }
     .imglist-container>.arrow-container {
         width: 40px;
-        height: 20%;
+        height: 90%;
     }
     
     .imglist-container>input[type="file"] {
@@ -223,7 +229,7 @@ input[type="text"]:focus {
     background-color: rgba(0,0,0,0.2);
 }
 #img-desc {
-    width: 70%;
+    width: 65%;
     height: 40px;
 }
 
@@ -246,7 +252,7 @@ hr {
     justify-content: center;
     
     position: relative;
-    width: 40%;
+    width: var(--bottom-width);
     height: 80px;
     
     margin-top: 10px;
@@ -295,17 +301,17 @@ form input[type="submit"] {
 
 #btn-results-wrapper {
     display: flex;
-    width: 40%;
+    width: var(--bottom-width);
     height: 40px;
 }
 
 #results-box {
     display: grid;
     grid-template-rows: 0fr;
-    align-items: inherit;
-    justify-content: inherit;
     
-    width: 40%;
+    width: var(--bottom-width);
+    
+    background-color: rgb(245, 248, 252);
     
     border: 2px solid rgb(99, 106, 126);
     border-bottom-width: 6px;
@@ -319,6 +325,11 @@ form input[type="submit"] {
 }
 
 #results-content {
+    display: flex;
+    flex-direction: column;
+    align-items: inherit;
+    justify-content: inherit;
+    width: 100%;
     min-height: 0;
 }
 
@@ -331,6 +342,52 @@ form input[type="submit"] {
 #results-img-wrapper.imglist-container .img-wrapper-inner {
     width: var(--image-size-small);
     height: var(--image-size-small)
+}
+
+#img-title {
+    font-size: small;
+    font-weight: 300;
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+
+.result-value-box {
+    color: white;
+    background-color: rgb(46, 47, 51);
+    font-size: medium;
+    font-weight: 400;
+    
+    margin: 10px;
+    padding: 20px;
+    
+    width: 30%;
+    height: 200px;
+    min-width: max-content;
+    
+    border: 2px solid rgb(10, 11, 12);
+    border-bottom-width: 6px;
+    border-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.result-value-box {
+    .result-value {
+        margin-top: 0px;
+        margin-bottom: 10px;
+        font-size: xx-large;
+        font-weight: 900;
+    }
+}
+
+.txt-sm {
+    font-size: small;
+}
+.txt-md {
+    font-size: medium;
+}
+.txt-lg {
+    font-size: large;
 }
 
 @keyframes spin { 
