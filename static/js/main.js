@@ -31,6 +31,7 @@ window.onload = function () {
     let img3 = new ImageList(3, 'Nincs megjelenítendő kép').create(get('results-img-wrapper'));
     img3.container.classList.add('small');
     let imgTitle = get('img-title');
+    let btnDownload = get('btn-download');
     window.onmousemove = function (ev) {
         img1.moveWithCursor(ev);
         img2.moveWithCursor(ev);
@@ -89,13 +90,17 @@ window.onload = function () {
             txtError.textContent = json.message ?? json.error ?? '';
             if (json.data) {
                 imageSearchResult = json.data;
-                console.log(imageSearchResult);
                 let formImgs = formData.getAll('img-input-2');
                 img3.setUrls((formImgs));
                 visitedResults = [];
                 if (btnResultsOn) {
                     animateResults(imageSearchResult[img3.page], img3.page);
                 }
+                // letöltés
+                let blob = new Blob([JSON.stringify(imageSearchResult, null, 2)], { type: "application/json" });
+                let blobUrl = window.URL.createObjectURL(blob);
+                btnDownload.href = blobUrl;
+                btnDownload.download = 'results.json';
             }
             else {
                 btnResultsOn = false;

@@ -46,6 +46,8 @@ window.onload = function() {
     
     let imgTitle = get('img-title') as HTMLSpanElement;
     
+    let btnDownload = get('btn-download') as HTMLAnchorElement;
+    
     window.onmousemove = function(ev: MouseEvent) {
         img1.moveWithCursor(ev);
         img2.moveWithCursor(ev);
@@ -78,7 +80,7 @@ window.onload = function() {
         })
            .then(res => {
                 if (res.ok)
-                    return res.json()
+                    return res.json();
                 return {
                     "error": "An unexpected error has occurred!"
                 }
@@ -114,7 +116,6 @@ window.onload = function() {
                 
                 if (json.data) {
                     imageSearchResult = json.data;
-                    console.log(imageSearchResult);
                     
                     let formImgs = formData.getAll('img-input-2');
                     img3.setUrls(<Array<File>>(formImgs));
@@ -123,6 +124,12 @@ window.onload = function() {
                     if (btnResultsOn) {
                         animateResults(imageSearchResult![img3.page], img3.page);
                     }
+                    
+                    // letöltés
+                    let blob = new Blob([JSON.stringify(imageSearchResult, null, 2)], { type: "application/json" });
+                    let blobUrl = window.URL.createObjectURL(blob);
+                    btnDownload.href = blobUrl;
+                    btnDownload.download = 'results.json';
                 }
                 else {
                     btnResultsOn = false;
