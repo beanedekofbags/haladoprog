@@ -1,10 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 :root {
-    --bg-color-main: white;
     --image-size: 500px;
     --image-size-small: 350px;
     --bottom-width: 30%;
+    
+    /* https://getcssscan.com/css-box-shadow-examples (kicsit változtatva) */
+    --cool-shadow: rgba(50, 50, 93, 0.3) 0px 10px 30px -5px, rgba(0, 0, 0, 0.2) 0px 10px 20px -10px;
+
+    --exponential-out: cubic-bezier(0.19, 1, 0.22, 1);
+    --exponential-in: cubic-bezier(0.95, 0.05, 0.795, 0.035);
 }
 
 body * {
@@ -32,8 +37,11 @@ body * {
 }
 
 body {
-    background-color: var(--bg-color-main);
-    margin: 20px;
+    background-image: url("../img/bg.png");
+    background-size: 100%;
+    background-attachment: fixed;
+    margin: 10px;
+    margin-top: 50px;
 }
 
 #img-list-box {
@@ -53,6 +61,12 @@ body {
     .row.centered {
         justify-content: center;
     }
+
+#upload-form {
+    input {
+        box-shadow: var(--cool-shadow)
+    }
+}
 
 .imglist-container {
     display: flex;
@@ -83,7 +97,8 @@ body {
         position: relative;
         overflow: hidden;
         
-        background-color: rgb(225, 225, 231);
+        backdrop-filter: blur(4px);
+        background-color: rgba(255, 255, 255, 0.1);
         
         border: 2px solid rgb(35, 37, 43);
         border-bottom-width: 6px;
@@ -138,7 +153,7 @@ body {
         }
             .imglist-container .img-wrapper-inner>.img-back>img {
                 filter: blur(8px) brightness(65%);
-                opacity: 0.85;
+                opacity: 0.8;
                 object-fit: cover;
                 width: inherit;
                 height: inherit;
@@ -153,6 +168,8 @@ body {
     
     width: 100%;
     height: 100%;
+    
+    backdrop-filter: blur(3px);
 }
     .arrow-container>button {
         position: absolute;
@@ -160,29 +177,36 @@ body {
         height: 100%;
         width: 100%;
         
-        transition: scale 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-        
-        border: 1px solid rgb(203, 208, 224);
+        border: 1px solid rgba(150, 155, 168);
         border-bottom-width: 3px;
         border-radius: 5px;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         
-        background-color: rgb(245, 245, 250);
+        opacity: 0.4;
+        background-color: rgba(245, 245, 250);
         cursor: default;
         
         z-index: 1;
+        
+        transition:
+            background-color 800ms var(--exponential-out),
+            opacity 800ms var(--exponential-out),
+            border-color 800ms var(--exponential-out),
+            box-shadow 800ms var(--exponential-out);
     }
     .arrow-container>button:enabled {
-        border-color: rgb(101, 103, 112);
-        background-color: rgb(207, 207, 218);
+        opacity: 0.75;
+        border-color: rgb(86, 87, 95);
+        background-color: rgb(243, 243, 255);
         cursor: pointer;
+        box-shadow: var(--cool-shadow);
     }
     .arrow-container>button:enabled:hover {
-        background-color: rgb(182, 182, 204);
+        background-color: rgb(236, 236, 255);
     }
     .arrow-container>button:enabled:active {
-        background-color: rgb(130, 130, 150);
+        background-color: rgb(211, 211, 236);
     }
     
     .arrow-container>.icon {
@@ -191,18 +215,28 @@ body {
         pointer-events: none;
         z-index: 2;
         
-        border: solid white;
+        opacity: 0.4;
+        border: solid rgba(86, 87, 95, 0.3);
         border-width: 0 5px 5px 0;
         
         width: 10px;
         height: 10px;
+        
+        transition: 
+            opacity 800ms var(--exponential-out),
+            border-color 800ms var(--exponential-out);
+    }
+    
+    .arrow-container.enabled>.icon {
+        opacity: 0.75;
+        border-color: rgb(86, 87, 95);
     }
 
 input[type="text"] {
     font-size: large;
     text-align: center;
     
-    border: 1px solid rgba(0,0,0,0.3);
+    border: 2px solid rgb(35, 37, 43);
     border-bottom-width: 3px;
     border-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -210,31 +244,47 @@ input[type="text"] {
     
     padding: 8px;
     
-    background-image: url("../img/grid.png");
-    background-color: rgba(0,0,0,0.05);
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.1);
     background-size: 2px;
     image-rendering: pixelated;
+    
+    z-index: 4;
+    
+    transition:
+        background-color 800ms var(--exponential-out),
+        backdrop-filter 800ms var(--exponential-out);
 }
 input[type="text"]:focus {
     outline: none;
-    background-color: rgba(0,0,0,0.2);
+    backdrop-filter: blur(8px);
+    background-color: rgba(241, 244, 255, 0.2);
 }
 #img-desc {
-    width: 65%;
+    width: 64%;
     height: 40px;
 }
 
 hr {
     width: 80%;
     border: none;
-    border-top: 0.2px solid rgba(0,0,0,0.3);
-    margin-top: 16px;
-    margin-bottom: 16px;
+    border-top: 2px solid rgba(0, 0, 0, 0.4);
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+#submit-area {
+    margin-top: 40px;
 }
 
 #txt-error {
     font-size: small;
-    color: rgb(199, 30, 67);
+    color: rgb(179, 25, 58);
+    margin-top: 25px;
+    margin-bottom: 5px;
+    text-shadow:
+        0 0 15px rgba(0, 0, 0, 0.2),
+        0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 #submit-container {
@@ -256,6 +306,9 @@ form input[type="submit"] {
     width: 100%;
     height: 100%;
     
+    color: white;
+    background-color: rgb(46, 47, 51);
+    
     border: 1px solid rgb(101, 103, 112);
     border-bottom-width: 3px;
     border-radius: 5px;
@@ -264,6 +317,34 @@ form input[type="submit"] {
     
     font-size: large;
     z-index: 1;
+    
+    transition: 
+        background-color 800ms var(--exponential-out),
+        box-shadow 800ms var(--exponential-out);
+}
+
+form input[type="submit"].error:disabled {
+    transition: none;
+    background-color: rgb(223, 58, 86);
+    border-color: rgb(77, 24, 40);
+}
+
+form input[type="submit"]:disabled {
+    backdrop-filter: blur(3px);
+    background-color: rgba(244, 248, 255, 0.4);
+    border-color: rgb(101, 103, 112, 0.4);
+    box-shadow: none;
+}
+
+form input[type="submit"]:enabled:hover {
+    background-color: rgb(57, 59, 63);
+}
+
+form input[type="submit"]:enabled:active {
+    transition: 
+        background-color 800ms var(--exponential-out),
+        box-shadow 800ms var(--exponential-out);
+    background-color: rgb(85, 88, 94);
 }
 
 #btn-download {
@@ -322,6 +403,9 @@ form input[type="submit"] {
     width: var(--bottom-width);
     
     background-color: rgb(245, 248, 252);
+    opacity: 0;
+    
+    box-shadow: var(--cool-shadow);
     
     border: 2px solid rgb(99, 106, 126);
     border-bottom-width: 6px;
@@ -332,6 +416,7 @@ form input[type="submit"] {
     margin: 10px 0 10px 0;
     
     overflow: hidden;
+    z-index: 4;
 }
 
 #results-content {
@@ -351,7 +436,7 @@ form input[type="submit"] {
 
 #results-img-wrapper.imglist-container .img-wrapper-inner {
     width: var(--image-size-small);
-    height: var(--image-size-small)
+    height: var(--image-size-small);
 }
 
 #img-title {

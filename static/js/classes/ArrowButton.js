@@ -31,5 +31,6 @@ export class ArrowButton {
     }
     toggle(toggle) {
         this.button.disabled = !toggle;
+        this.container.classList.toggle('enabled', toggle);
     }
 }

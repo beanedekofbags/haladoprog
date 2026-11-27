@@ -39,6 +39,10 @@ export class ImageList {
             imgFrontB.style.zIndex = '2';
         }
         let imgBack = document.createElement('img');
+        let imgBackShadow = document.createElement('div');
+        {
+            imgBackShadow.classList.add('shadow-in');
+        }
         let imgBackWrapper = document.createElement('div');
         {
             imgBackWrapper.classList.add('img-back');

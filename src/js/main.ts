@@ -7,7 +7,7 @@ import { TimeoutAnimation } from "./classes/TimeoutAnimation.js";
 
 let errorAnim: { [id: string]: Animation } = {}
 let throbberAnim: Animation | undefined;
-let resultAnim: Animation | undefined;
+let resultAnim: { [id: string]: Animation } = {}
 
 const errorAnimDuration = 600;
 const throbberPopDuration = 300;
@@ -54,7 +54,7 @@ window.onload = function() {
         img3.moveWithCursor(ev);
     }
     
-    let visitedResults: Array<number> = []
+    let visitedResults: Array<number> = [];
     
     uploadForm.onsubmit = (ev: SubmitEvent) => {
         ev.preventDefault();
@@ -62,6 +62,7 @@ window.onload = function() {
         let formData = new FormData(uploadForm)
         imgSubmit.value = ''
         imgSubmit.disabled = true;
+        imgSubmit.classList.remove('error');
         loading.classList.toggle('invisible', false);
         txtError.classList.toggle('invisible', true);
         
@@ -99,15 +100,7 @@ window.onload = function() {
                         duration: errorAnimDuration,
                         easing: easings.bouncy.out
                     });
-                    errorAnim['color'] = imgSubmit.animate([
-                        { backgroundColor: 'rgb(219, 127, 155)', offset: 1.0 },
-                        { borderColor: 'rgb(105, 36, 57)', offset: 1.0 }
-                    ],
-                    {
-                        duration: errorAnimDuration,
-                        easing: easings.exponential.out,
-                        direction: "reverse"
-                    });
+                    imgSubmit.classList.add('error');
                 }
                 else {
                     btnResults.toggle(true);
@@ -198,15 +191,20 @@ window.onload = function() {
     let resultsToggle = () => {
         btnResults.setDirection(btnResultsOn ? 90 : -90);
         
-        resultAnim?.pause();
-        resultAnim = resultsBox.animate([
+        resultAnim['height'] = resultsBox.animate([
             { paddingTop: `${btnResultsOn ? paddingTop : 0}px`, offset: 1.0 },
             { paddingBottom: `${btnResultsOn ? paddingBottom : 0}px`, offset: 1.0 },
-            { gridTemplateRows: `${btnResultsOn ? 1 : 0}fr`, offset: 1.0 },
-            { translate: `0 ${btnResultsOn ? 0 : -40}px`, offset: 1.0 }
+            { gridTemplateRows: `${btnResultsOn ? 1 : 0}fr`, offset: 1.0 }
         ], {
             duration: 500,
             easing: easings.exponential.out,
+            fill: "forwards"
+        });
+        resultAnim['fade'] = resultsBox.animate([
+            { opacity: `${btnResultsOn ? 100 : 0}%`, offset: 1.0 },
+        ], {
+            duration: 500,
+            easing: btnResultsOn ? easings.exponential.out : easings.exponential.in,
             fill: "forwards"
         });
         
@@ -217,7 +215,7 @@ window.onload = function() {
             animateResults(r, img3.page);
         }
         else {
-            resultAnim.onfinish = () => {
+            resultAnim['fade'].onfinish = () => {
                 resultsBox.classList.toggle('invisible', true);
             }
         }

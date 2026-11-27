@@ -47,6 +47,10 @@ export class ImageList {
             
         let imgBack = document.createElement('img');
         
+        let imgBackShadow = document.createElement('div'); {
+            imgBackShadow.classList.add('shadow-in');
+        }
+        
         let imgBackWrapper = document.createElement('div'); {
             imgBackWrapper.classList.add('img-back');
             imgBackWrapper.classList.add('inactive');
