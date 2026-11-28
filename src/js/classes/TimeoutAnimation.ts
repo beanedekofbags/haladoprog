@@ -1,3 +1,4 @@
+// az osztály neve ellenére konkrétan csak szöveg "animálására" használom
 export class TimeoutAnimation {
     
     private ids: number[] = [];

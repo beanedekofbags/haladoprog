@@ -6,7 +6,6 @@ model = "qwen3.5:4b"
 
 def processImages(ref_images: list[ImageInput], search_images: list[ImageInput], description: str):
     try:
-        # Find a pattern in the reference image(s) that matches the provided description, then, only once you find a matching pattern, try to match the reference images against the target image using this pattern and the description provided. 
         setup = {'role':'system', 'content': f"""
                 You are provided a list of images and a description. Every image until the last one is to be used as your reference. The last image in the list is the target image which you will be comparing the references against. If there are only two images, then the first one is the reference, the second one is the target.
                 Your task is to match the reference image (or images) against the target image. Use the description provided by the user to narrow down the point of comparison between the reference image (or images) and the target image.

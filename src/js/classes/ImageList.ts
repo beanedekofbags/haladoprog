@@ -1,6 +1,7 @@
-import easings from "../util/easings.js";
+import { easings } from "../util/easings.js";
 import { ArrowButton } from "./ArrowButton.js"
 
+// képnézegető
 export class ImageList {
     
     protected static accepted = 'image/png,image/jpeg,image/webp'

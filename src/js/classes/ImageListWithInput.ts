@@ -1,7 +1,7 @@
-import easings from "../util/easings.js";
-import { ArrowButton } from "./ArrowButton.js"
 import { ImageList } from "./ImageList.js";
 
+// képnézegető, de bemenettel!!!!
+// feltöltéskor automatikusan frissül a képnézegető
 export class ImageListWithInput extends ImageList {
     
     public input: HTMLInputElement;

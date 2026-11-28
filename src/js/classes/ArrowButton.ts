@@ -1,3 +1,4 @@
+// nyíl gomb, ilyen-olyan használatra, de legfőképp a képnézegetőhöz
 export class ArrowButton {
     
     public icon: HTMLDivElement;
