@@ -124,7 +124,7 @@ window.onload = function() {
                     btnDownload.href = blobUrl;
                     btnDownload.download = 'results.json';
                 }
-                if (imageSearchResult === null || imageSearchResult.length === 0) {
+                if (imageSearchResult === null || imageSearchResult?.length === 0) {
                     btnResultsOn = false;
                     resultsToggle();
                 }

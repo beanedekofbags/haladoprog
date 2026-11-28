@@ -1,4 +1,3 @@
-import asyncio
 import ollama
 from werkzeug.datastructures.file_storage import FileStorage
 from src.py.classes.image import ImageInput, ImageSearchResult, ImageOutput

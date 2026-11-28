@@ -1,7 +1,4 @@
-import base64
-import io
-
-from flask import Flask, request, url_for, send_file
+from flask import Flask, request
 from flask import render_template as template
 from src.py.vision import processImages
 from src.py.classes.image import ImageInput
