@@ -393,7 +393,8 @@ form input[type="submit"]:enabled:active {
 #btn-results-wrapper {
     display: flex;
     width: var(--bottom-width);
-    height: 40px;
+    height: 50px;
+    z-index: 4;
 }
 
 #results-box {
@@ -416,7 +417,7 @@ form input[type="submit"]:enabled:active {
     margin: 10px 0 10px 0;
     
     overflow: hidden;
-    z-index: 4;
+    z-index: 5;
 }
 
 #results-content {
