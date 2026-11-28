@@ -1,9 +1,8 @@
-import json
-
-from flask import Flask, request, Response
+from flask import Flask, request
 from flask import render_template as template
 from src.py.vision import processImages
 from src.py.classes.image import ImageInput
+from src.py.util import make_error
 
 app = Flask(__name__)
 
@@ -12,15 +11,6 @@ allowed_types = [
     'image/jpeg',
     'image/webp'
 ]
-
-def make_error(code: int, description: str):
-    return Response(
-        json.dumps({
-            "description": description
-        }),
-        status=code,
-        mimetype='application/json'
-    )
 
 @app.get('/')
 def index():

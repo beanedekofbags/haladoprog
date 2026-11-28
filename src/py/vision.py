@@ -1,6 +1,7 @@
 import ollama
 from werkzeug.datastructures.file_storage import FileStorage
 from src.py.classes.image import ImageInput, ImageSearchResult, ImageOutput
+from src.py.util import make_error
 
 model = "qwen3.5:4b"
 
@@ -39,7 +40,5 @@ def processImages(ref_images: list[ImageInput], search_images: list[ImageInput],
         return {
             "data": results
         }
-    except Exception as e:
-        return {
-            "error": repr(e)
-        }
+    except ConnectionError:
+        return make_error(503, description='Hiba lépett fel az Ollama-hoz kapcsolódáskor!')
