@@ -19,4 +19,4 @@ A projekt build-elése, futtatása:
 2. A projekt mappáját megnyitjuk parancssorban
 3. Telepítjük a szükséges függőségeket
 4. `tsc -p src` vagy `npm run tsc -p src` paranccsal compile-oljuk a TypeScript projektet
-5. `flask --app app run` paranccsal elindítjuk a webapplikációt
+5. `flask --app app run` vagy `python app.py` paranccsal elindítjuk a webapplikációt
